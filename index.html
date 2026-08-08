@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mary.MattyMovies - Personal Movie Streaming</title>
+  <meta name="description" content="A modern, responsive, cinematic movie streaming platform inspired by premium streaming experiences.">
+  <meta name="theme-color" content="#07080b">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Top Glassmorphic Navigation Header -->
+  <header class="site-header" id="siteHeader">
+    <a href="./index.html" class="nav-brand">
+      <img src="./assets/images/logo.jpg" alt="Mary.MattyMovies Logo" class="brand-icon-img">
+      <div class="brand-title">Mary.Matty<span>Movies</span></div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="./index.html" class="nav-link active">Home</a></li>
+      <li><a href="#trending-section" class="nav-link">Trending</a></li>
+      <li><a href="#popular-section" class="nav-link">Popular</a></li>
+      <li><a href="#watchlist-section" class="nav-link">My Watchlist</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="search-trigger-btn" id="openSearchBtn">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <span>Search movies...</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Featured Hero Banner Section -->
+  <section class="hero-banner" id="heroBanner">
+    <div class="hero-backdrop-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge"><i class="fa-solid fa-star"></i> Featured Premiere</div>
+      <h1 class="hero-title" id="heroTitle">Tears of Steel</h1>
+      <div class="hero-meta">
+        <span class="rating-pill"><i class="fa-solid fa-star"></i> <span id="heroRating">7.8</span></span>
+        <span id="heroYear">2012</span>
+        <span id="heroRuntime">12 min</span>
+        <div class="hero-genres" id="heroGenres">
+          <span class="genre-tag">Sci-Fi</span>
+          <span class="genre-tag">Action</span>
+        </div>
+      </div>
+      <p class="hero-description" id="heroDescription">
+        In a dystopian future in Amsterdam, a group of warriors and scientists gather to stage a crucial desperate intervention to save humanity.
+      </p>
+      <div class="hero-actions">
+        <a href="./watch.html?id=tears-of-steel" class="btn btn-primary" id="heroWatchBtn">
+          <i class="fa-solid fa-play"></i> Watch Now
+        </a>
+        <a href="./movie.html?id=tears-of-steel" class="btn btn-secondary" id="heroInfoBtn">
+          <i class="fa-solid fa-circle-info"></i> More Info
+        </a>
+        <button class="btn btn-secondary btn-icon-only" id="heroWatchlistBtn" title="Add to Watchlist">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <main class="main-container">
+
+    <!-- Continue Watching Section (Hidden if empty) -->
+    <section class="category-section" id="continue-watching-section" style="display: none;">
+      <div class="section-header">
+        <div class="section-title-group">
+          <div class="section-indicator"></div>
+          <h2 class="section-title">Continue Watching</h2>
+        </div>
+      </div>
+      <div class="carousel-wrapper">
+        <div class="movie-row-grid" id="continueWatchingGrid">
+          <!-- Dynamically filled by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Trending Movies Section -->
+    <section class="category-section" id="trending-section">
+      <div class="section-header">
+        <div class="section-title-group">
+          <div class="section-indicator"></div>
+          <h2 class="section-title">Trending Now</h2>
+        </div>
+      </div>
+      <div class="carousel-wrapper">
+        <button class="carousel-btn prev" id="trendingPrev"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="movie-row-grid" id="trendingGrid">
+          <!-- Skeleton shimmer placeholders -->
+          <div class="movie-card skeleton"></div>
+          <div class="movie-card skeleton"></div>
+          <div class="movie-card skeleton"></div>
+          <div class="movie-card skeleton"></div>
+        </div>
+        <button class="carousel-btn next" id="trendingNext"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <!-- Popular Movies Section -->
+    <section class="category-section" id="popular-section">
+      <div class="section-header">
+        <div class="section-title-group">
+          <div class="section-indicator"></div>
+          <h2 class="section-title">Popular Films</h2>
+        </div>
+      </div>
+      <div class="carousel-wrapper">
+        <button class="carousel-btn prev" id="popularPrev"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="movie-row-grid" id="popularGrid">
+          <!-- Skeleton shimmer placeholders -->
+          <div class="movie-card skeleton"></div>
+          <div class="movie-card skeleton"></div>
+          <div class="movie-card skeleton"></div>
+          <div class="movie-card skeleton"></div>
+        </div>
+        <button class="carousel-btn next" id="popularNext"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <!-- My Watchlist Section -->
+    <section class="category-section" id="watchlist-section">
+      <div class="section-header">
+        <div class="section-title-group">
+          <div class="section-indicator"></div>
+          <h2 class="section-title">My Watchlist</h2>
+        </div>
+      </div>
+      <div class="carousel-wrapper">
+        <div class="movie-row-grid" id="watchlistGrid">
+          <!-- Dynamically rendered or empty state -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Search Modal Backdrop -->
+  <div class="search-modal-backdrop" id="searchModal">
+    <div class="search-input-box">
+      <i class="fa-solid fa-magnifying-glass search-icon-left"></i>
+      <input type="text" class="search-input-field" id="searchInput" placeholder="Search title, genre, or keyword..." autocomplete="off">
+      <button class="search-close-btn" id="closeSearchBtn"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="search-results-wrapper" id="searchResultsContainer">
+      <!-- Search results injected here -->
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer style="padding: 40px 4%; border-top: 1px solid var(--border-subtle); color: var(--text-muted); font-size: 0.9rem; text-align: center; background: var(--bg-secondary);">
+    <p>© 2026 Mary.MattyMovies • Designed for personal movie streaming with legitimate open providers.</p>
+  </footer>
+
+  <!-- Client JavaScript Modules -->
+  <script src="./js/providers/tmdbProvider.js"></script>
+  <script src="./js/providers/videoProvider.js"></script>
+  <script src="./js/providers/movieProvider.js"></script>
+  <script src="./js/storage.js"></script>
+  <script src="./js/search.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watching - Mary.MattyMovies Player</title>
+  <meta name="description" content="Cinematic video player page on Mary.MattyMovies.">
+  <meta name="theme-color" content="#000000">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="player-page-body">
+
+  <div class="player-container" id="playerContainer">
+
+    <!-- Player Top Navigation Bar -->
+    <div class="player-top-bar" id="playerTopBar">
+      <a href="./index.html" class="player-back-btn" id="playerBackBtn">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Back to Home</span>
+      </a>
+      <div class="player-title-display" id="playerTitle">Loading Movie...</div>
+      <div style="width: 100px;"><!-- spacer --></div>
+    </div>
+
+    <!-- Direct HTML5 Video Player Container -->
+    <video class="player-video-element" id="mainVideoPlayer" preload="metadata" crossorigin="anonymous" style="display: none;">
+      <!-- Track tags inserted dynamically -->
+    </video>
+
+    <!-- Authorized Embed Iframe Player Container -->
+    <iframe class="player-iframe-element" id="mainIframePlayer" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen style="display: none;"></iframe>
+
+    <!-- Custom Control Overlay Bar for HTML5 Video -->
+    <div class="player-bottom-controls" id="playerControls" style="display: none;">
+      
+      <!-- Interactive Seek Bar -->
+      <div class="seekbar-wrapper" id="seekbarWrapper">
+        <div class="seekbar-track">
+          <div class="seekbar-fill" id="seekbarFill">
+            <div class="seekbar-handle"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls-row">
+        
+        <div class="controls-group-left">
+          <button class="ctrl-btn" id="playPauseBtn" title="Play / Pause (Space)">
+            <i class="fa-solid fa-play"></i>
+          </button>
+          
+          <button class="ctrl-btn" id="skipBackBtn" title="Rewind 5s (←)">
+            <i class="fa-solid fa-rotate-left"></i>
+          </button>
+
+          <button class="ctrl-btn" id="skipForwardBtn" title="Forward 5s (→)">
+            <i class="fa-solid fa-rotate-right"></i>
+          </button>
+
+          <div class="volume-control-group">
+            <button class="ctrl-btn" id="muteBtn" title="Mute / Unmute (M)">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="1">
+          </div>
+
+          <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
+        </div>
+
+        <div class="controls-group-right">
+          <!-- Subtitle Tracks Dropdown -->
+          <div style="display: flex; align-items: center; gap: 6px; color: #aaa; font-size: 0.85rem;">
+            <i class="fa-solid fa-closed-captioning"></i>
+            <select class="player-select" id="subtitleSelect">
+              <option value="off">Subtitles Off</option>
+            </select>
+          </div>
+
+          <!-- Playback Speed Dropdown -->
+          <div style="display: flex; align-items: center; gap: 6px; color: #aaa; font-size: 0.85rem;">
+            <i class="fa-solid fa-gauge-high"></i>
+            <select class="player-select" id="speedSelect">
+              <option value="0.5">0.5x</option>
+              <option value="1" selected>1.0x (Normal)</option>
+              <option value="1.25">1.25x</option>
+              <option value="1.5">1.5x</option>
+              <option value="2">2.0x</option>
+            </select>
+          </div>
+
+          <!-- Picture in Picture -->
+          <button class="ctrl-btn" id="pipBtn" title="Picture in Picture">
+            <i class="fa-solid fa-clone"></i>
+          </button>
+
+          <!-- Fullscreen -->
+          <button class="ctrl-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+            <i class="fa-solid fa-expand"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="./js/providers/tmdbProvider.js"></script>
+  <script src="./js/providers/videoProvider.js"></script>
+  <script src="./js/providers/movieProvider.js"></script>
+  <script src="./js/storage.js"></script>
+  <script src="./js/player.js"></script>
+</body>
+</html>
