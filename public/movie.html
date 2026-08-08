@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Details - Mary.MattyMovies</title>
+  <meta name="description" content="Detailed overview, trailer, and watch links for movies on Mary.MattyMovies.">
+  <meta name="theme-color" content="#07080b">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="details-page-wrapper">
+
+  <!-- Navigation Header -->
+  <header class="site-header scrolled">
+    <a href="./index.html" class="nav-brand">
+      <img src="./assets/images/logo.jpg" alt="Mary.MattyMovies Logo" class="brand-icon-img">
+      <div class="brand-title">Mary.Matty<span>Movies</span></div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="./index.html" class="nav-link">Home</a></li>
+      <li><a href="./index.html#trending-section" class="nav-link">Trending</a></li>
+      <li><a href="./index.html#popular-section" class="nav-link">Popular</a></li>
+      <li><a href="./index.html#watchlist-section" class="nav-link">My Watchlist</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="search-trigger-btn" id="openSearchBtn">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <span>Search movies...</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Movie Details Hero Backdrop Section -->
+  <section class="details-hero" id="detailsHero">
+    <div class="details-hero-overlay"></div>
+    <div class="details-content-grid">
+      <div>
+        <img class="details-poster" id="detailsPoster" src="" alt="Poster">
+      </div>
+      <div class="details-info">
+        <div class="hero-badge" id="detailsBadge"><i class="fa-solid fa-film"></i> Official Film</div>
+        <h1 class="details-title" id="detailsTitle">Loading Movie...</h1>
+        
+        <div class="details-meta-row">
+          <span class="rating-pill"><i class="fa-solid fa-star"></i> <span id="detailsRating">--</span></span>
+          <span id="detailsYear">----</span>
+          <span id="detailsRuntime">-- min</span>
+          <div class="hero-genres" id="detailsGenres"></div>
+        </div>
+
+        <p class="details-synopsis" id="detailsSynopsis">
+          Fetching cinematic details...
+        </p>
+
+        <div class="details-cast-row">
+          <p><strong>Director:</strong> <span id="detailsDirector">--</span></p>
+          <p style="margin-top: 4px;"><strong>Cast:</strong> <span id="detailsCast">--</span></p>
+        </div>
+
+        <div class="hero-actions" style="margin-top: 12px;">
+          <a href="#" class="btn btn-primary" id="watchNowBtn">
+            <i class="fa-solid fa-play"></i> Watch Now
+          </a>
+          <button class="btn btn-secondary" id="toggleWatchlistBtn">
+            <i class="fa-solid fa-plus"></i> <span id="watchlistBtnLabel">Add to Watchlist</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trailer & Similar Movies Section -->
+  <main class="main-container">
+    
+    <!-- Trailer Section -->
+    <section class="category-section" id="trailer-section">
+      <div class="section-header">
+        <div class="section-title-group">
+          <div class="section-indicator"></div>
+          <h2 class="section-title">Official Trailer</h2>
+        </div>
+      </div>
+      <div style="width: 100%; max-width: 900px; aspect-ratio: 16 / 9; background: #000; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-subtle);">
+        <iframe id="trailerIframe" style="width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
+      </div>
+    </section>
+
+    <!-- Similar Movies Section -->
+    <section class="category-section">
+      <div class="section-header">
+        <div class="section-title-group">
+          <div class="section-indicator"></div>
+          <h2 class="section-title">Similar Recommended Movies</h2>
+        </div>
+      </div>
+      <div class="carousel-wrapper">
+        <div class="movie-row-grid" id="similarGrid">
+          <!-- Dynamically filled -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Search Modal -->
+  <div class="search-modal-backdrop" id="searchModal">
+    <div class="search-input-box">
+      <i class="fa-solid fa-magnifying-glass search-icon-left"></i>
+      <input type="text" class="search-input-field" id="searchInput" placeholder="Search title, genre, or keyword..." autocomplete="off">
+      <button class="search-close-btn" id="closeSearchBtn"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="search-results-wrapper" id="searchResultsContainer"></div>
+  </div>
+
+  <footer style="padding: 40px 4%; border-top: 1px solid var(--border-subtle); color: var(--text-muted); font-size: 0.9rem; text-align: center; background: var(--bg-secondary);">
+    <p>© 2026 Mary.MattyMovies • Designed for personal movie streaming with legitimate open providers.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="./js/providers/tmdbProvider.js"></script>
+  <script src="./js/providers/videoProvider.js"></script>
+  <script src="./js/providers/movieProvider.js"></script>
+  <script src="./js/storage.js"></script>
+  <script src="./js/search.js"></script>
+  <script src="./js/movie.js"></script>
+</body>
+</html>

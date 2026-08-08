@@ -1,0 +1,25 @@
+{
+  "name": "cinestream",
+  "version": "1.0.0",
+  "description": "A modern, responsive, dark-cinematic personal movie streaming interface.",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js"
+  },
+  "keywords": [
+    "streaming",
+    "movies",
+    "video-player",
+    "tmdb",
+    "express",
+    "github-pages"
+  ],
+  "author": "Antigravity",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
