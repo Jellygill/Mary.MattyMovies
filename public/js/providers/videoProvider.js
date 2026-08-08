@@ -1,7 +1,7 @@
 /**
  * videoProvider.js - Client-Side Multi-Server Embed Provider
- * Provides multiple fast stream servers.
- * Allows instant switching if any video is unavailable on a specific server.
+ * Features clean, ad-free video players (Videasy, VidLink, VidBinge)
+ * with auto-synced subtitles matching voice audio tracks.
  */
 
 window.CineStream = window.CineStream || {};
@@ -36,37 +36,37 @@ window.CineStream = window.CineStream || {};
     }
   };
 
-  // High-availability embed stream providers - Using tested working endpoints (200 OK)
+  // Clean, Ad-Free & Subtitle-Synced Video Stream Servers
   const EMBED_SERVERS = [
     {
-      id: 'vidsrcnet',
-      name: 'Server 1 (VidSrc.net)',
-      getMovieUrl: (id) => `https://vidsrc.net/embed/movie?tmdb=${id}`,
-      getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.net/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
+      id: 'videasy',
+      name: 'Server 1 (Videasy — Ad-Free + Synced Subs)',
+      getMovieUrl: (id) => `https://player.videasy.net/movie/${id}`,
+      getTvUrl: (id, s = 1, e = 1) => `https://player.videasy.net/tv/${id}/${s}/${e}`
     },
     {
-      id: 'vidsrcpm',
-      name: 'Server 2 (VidSrc.pm)',
-      getMovieUrl: (id) => `https://vidsrc.pm/embed/movie?tmdb=${id}`,
-      getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.pm/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
+      id: 'vidlink',
+      name: 'Server 2 (VidLink — 1080p Clean)',
+      getMovieUrl: (id) => `https://vidlink.pro/movie/${id}?primaryColor=ff69b0&secondaryColor=ffb6c1&iconColor=ff69b0`,
+      getTvUrl: (id, s = 1, e = 1) => `https://vidlink.pro/tv/${id}/${s}/${e}?primaryColor=ff69b0&secondaryColor=ffb6c1&iconColor=ff69b0`
+    },
+    {
+      id: 'vidbinge',
+      name: 'Server 3 (VidBinge — Open-Source)',
+      getMovieUrl: (id) => `https://vidbinge.dev/embed/movie/${id}`,
+      getTvUrl: (id, s = 1, e = 1) => `https://vidbinge.dev/embed/tv/${id}/${s}/${e}`
     },
     {
       id: 'autoembed',
-      name: 'Server 3 (AutoEmbed)',
+      name: 'Server 4 (AutoEmbed VIP)',
       getMovieUrl: (id) => `https://autoembed.co/movie/tmdb/${id}`,
       getTvUrl: (id, s = 1, e = 1) => `https://autoembed.co/tv/tmdb/${id}-${s}-${e}`
     },
     {
-      id: 'twoembed',
-      name: 'Server 4 (2Embed)',
-      getMovieUrl: (id) => `https://www.2embed.cc/embed/${id}`,
-      getTvUrl: (id, s = 1, e = 1) => `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`
-    },
-    {
-      id: 'multiembed',
-      name: 'Server 5 (MultiEmbed)',
-      getMovieUrl: (id) => `https://multiembed.mov/?video_id=${id}&tmdb=1`,
-      getTvUrl: (id, s = 1, e = 1) => `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`
+      id: 'vidsrcnet',
+      name: 'Server 5 (VidSrc.net)',
+      getMovieUrl: (id) => `https://vidsrc.net/embed/movie?tmdb=${id}`,
+      getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.net/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
     }
   ];
 
