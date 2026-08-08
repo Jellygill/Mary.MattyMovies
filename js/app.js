@@ -184,7 +184,7 @@ function renderWatchlist(storage) {
   if (watchlist.length === 0) {
     container.innerHTML = `
       <div class="empty-watchlist-box">
-        <img src="./assets/images/melody_watchlist.png" alt="My Melody Watchlist" class="empty-watchlist-img" style="width: 130px; height: auto;">
+        <img src="./assets/images/my melody gif5.gif" alt="My Melody Watchlist" class="empty-watchlist-img" style="width: 130px; height: auto;">
         <p style="font-size: 1.15rem; color: var(--text-primary); font-weight: 700; margin-top: 8px;">Our Watchlist is currently empty 💕</p>
         <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 420px; margin: 0 auto;">
           Click <strong><i class="fa-solid fa-heart" style="color: var(--accent-pink);"></i> Add to Our Watchlist</strong> on any movie to save it for Mary & Matty's next date night!
