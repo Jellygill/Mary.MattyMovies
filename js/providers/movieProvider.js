@@ -89,7 +89,7 @@ window.CineStream = window.CineStream || {};
         return json.data;
       }
       const movie = await window.CineStream.TMDBClientProvider.getMovieById(id);
-      const playback = await window.CineStream.VideoClientProvider.getPlaybackSource(movie.id);
+      const playback = await window.CineStream.VideoClientProvider.getPlaybackSource(movie.id, movie.mediaType);
       return {
         id: movie.id,
         title: movie.title,

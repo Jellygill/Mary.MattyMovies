@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       iframe.src = playback.url;
       video.style.display = 'none';
       playerControls.style.display = 'none';
+
+      setupServerSelector(iframe, playback.servers);
     } else {
       // Direct HTML5 Video Player Mode
       video.style.display = 'block';
@@ -55,6 +57,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   } catch (err) {
     console.error('Failed to initialize video player', err);
+  }
+
+  function setupServerSelector(iframe, servers) {
+    const serverBar = document.getElementById('serverSelectorBar');
+    const serverList = document.getElementById('serverBtnList');
+    if (!serverBar || !serverList || !servers || servers.length === 0) return;
+
+    serverBar.style.display = 'flex';
+    serverList.innerHTML = servers.map((srv, idx) => `
+      <button class="server-btn ${idx === 0 ? 'active' : ''}" data-url="${srv.url}">
+        <i class="fa-solid fa-play"></i> ${srv.name}
+      </button>
+    `).join('');
+
+    const buttons = serverList.querySelectorAll('.server-btn');
+    buttons.forEach(btn => {
+      btn.onclick = () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        iframe.src = btn.getAttribute('data-url');
+      };
+    });
   }
 
   function setupDirectVideoPlayer(video, playback, watchData, storage) {

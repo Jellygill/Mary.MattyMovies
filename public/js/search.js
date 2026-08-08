@@ -80,9 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="search-result-info">
           <div class="search-result-title">${escapeHTML(item.title)}</div>
           <div class="search-result-meta">
+            <span class="genre-tag" style="padding: 2px 6px; font-size: 0.7rem; background: var(--accent-pink); color: #fff; border-radius: 4px; font-weight: 700;">${item.mediaType === 'tv' ? 'TV Show' : 'Movie'}</span> •
             <span><i class="fa-solid fa-star" style="color: #ffc107;"></i> ${item.rating}</span> •
             <span>${item.year}</span> •
-            <span>${item.genres ? item.genres.join(', ') : 'Movie'}</span>
+            <span>${item.genres ? item.genres.slice(0, 2).join(', ') : ''}</span>
           </div>
         </div>
       </div>

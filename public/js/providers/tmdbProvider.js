@@ -1,7 +1,6 @@
 /**
  * tmdbProvider.js - Client-Side TMDB API Provider
- * Fetches real movie metadata from The Movie Database (TMDB) API.
- * Falls back to static catalog if API is unavailable.
+ * Support full multi-search (Movies, TV Shows, Anime) and detailed lookup.
  */
 
 window.CineStream = window.CineStream || {};
@@ -11,7 +10,7 @@ window.CineStream = window.CineStream || {};
   const TMDB_BASE     = 'https://api.themoviedb.org/3';
   const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p';
 
-  // --- Fallback catalog (used if TMDB is unreachable) ---
+  // --- Fallback catalog ---
   const FALLBACK_CATALOG = [
     {
       id: 'tears-of-steel',
@@ -23,11 +22,10 @@ window.CineStream = window.CineStream || {};
       description: 'In a dystopian future in Amsterdam, a group of warriors and scientists gather to stage a crucial desperate intervention to save humanity.',
       poster: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=800&auto=format&fit=crop',
       backdrop: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=1920&auto=format&fit=crop',
-      isFeatured: true, isTrending: true, isPopular: true
+      isFeatured: true, isTrending: true, isPopular: true, mediaType: 'movie'
     }
   ];
 
-  // --- TMDB Helpers ---
   async function tmdbFetch(endpoint, params = {}) {
     const url = new URL(`${TMDB_BASE}${endpoint}`);
     url.searchParams.set('api_key', TMDB_API_KEY);
@@ -38,19 +36,24 @@ window.CineStream = window.CineStream || {};
     return res.json();
   }
 
-  function formatMovie(m) {
+  function formatMedia(m) {
+    const isTV = (m.media_type === 'tv') || (!m.title && Boolean(m.name));
+    const title = isTV ? (m.name || m.original_name) : (m.title || m.original_title || 'Unknown');
+    const dateStr = isTV ? m.first_air_date : m.release_date;
+    const year = dateStr ? new Date(dateStr).getFullYear() : '—';
+
     const posterPath   = m.poster_path   ? `${TMDB_IMG_BASE}/w500${m.poster_path}`   : 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=800';
     const backdropPath = m.backdrop_path ? `${TMDB_IMG_BASE}/w1280${m.backdrop_path}` : 'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=1920';
-    const year  = m.release_date ? new Date(m.release_date).getFullYear() : '—';
     const genres = (m.genres || m.genre_ids || []).map(g => typeof g === 'object' ? g.name : g).filter(Boolean);
 
     return {
       id:          String(m.id),
-      title:       m.title || m.original_title || 'Unknown',
+      mediaType:   isTV ? 'tv' : 'movie',
+      title,
       year,
       rating:      m.vote_average ? parseFloat(m.vote_average.toFixed(1)) : 0,
       voteCount:   m.vote_count || 0,
-      runtime:     m.runtime ? `${m.runtime} min` : null,
+      runtime:     m.runtime ? `${m.runtime} min` : (m.episode_run_time && m.episode_run_time[0] ? `${m.episode_run_time[0]} min` : null),
       genres,
       director:    m.director || null,
       cast:        m.cast || [],
@@ -64,27 +67,29 @@ window.CineStream = window.CineStream || {};
     };
   }
 
-  // --- Provider ---
   window.CineStream.TMDBClientProvider = {
 
     async getFeaturedMovies() {
       try {
         const data = await tmdbFetch('/movie/now_playing', { page: 1 });
-        const movies = (data.results || []).slice(0, 10).map(formatMovie);
+        const movies = (data.results || []).slice(0, 10).map(formatMedia);
         if (movies.length > 0) movies[0].isFeatured = true;
         return movies;
       } catch (e) {
-        console.warn('TMDB getFeaturedMovies failed, using fallback:', e);
+        console.warn('TMDB getFeaturedMovies failed:', e);
         return FALLBACK_CATALOG.filter(m => m.isFeatured);
       }
     },
 
     async getTrendingMovies() {
       try {
-        const data = await tmdbFetch('/trending/movie/week');
-        return (data.results || []).slice(0, 20).map(m => ({ ...formatMovie(m), isTrending: true }));
+        const data = await tmdbFetch('/trending/all/week');
+        return (data.results || [])
+          .filter(m => m.media_type === 'movie' || m.media_type === 'tv')
+          .slice(0, 20)
+          .map(m => ({ ...formatMedia(m), isTrending: true }));
       } catch (e) {
-        console.warn('TMDB getTrendingMovies failed, using fallback:', e);
+        console.warn('TMDB getTrendingMovies failed:', e);
         return FALLBACK_CATALOG.filter(m => m.isTrending);
       }
     },
@@ -92,9 +97,9 @@ window.CineStream = window.CineStream || {};
     async getPopularMovies() {
       try {
         const data = await tmdbFetch('/movie/popular', { page: 1 });
-        return (data.results || []).slice(0, 20).map(m => ({ ...formatMovie(m), isPopular: true }));
+        return (data.results || []).slice(0, 20).map(m => ({ ...formatMedia(m), isPopular: true }));
       } catch (e) {
-        console.warn('TMDB getPopularMovies failed, using fallback:', e);
+        console.warn('TMDB getPopularMovies failed:', e);
         return FALLBACK_CATALOG;
       }
     },
@@ -102,22 +107,28 @@ window.CineStream = window.CineStream || {};
     async searchMovies(query = '', genre = '') {
       try {
         if (!query.trim() && !genre) return this.getPopularMovies();
-        const data = await tmdbFetch('/search/movie', { query: query.trim(), page: 1 });
-        let results = (data.results || []).map(formatMovie);
+
+        // Use multi search to get movies, tv shows, and anime
+        const data = await tmdbFetch('/search/multi', { query: query.trim(), page: 1 });
+        let results = (data.results || [])
+          .filter(m => m.media_type === 'movie' || m.media_type === 'tv')
+          .map(formatMedia);
+
         if (genre) {
           results = results.filter(m => m.genres.some(g => g.toLowerCase().includes(genre.toLowerCase())));
         }
         return results;
       } catch (e) {
-        console.warn('TMDB searchMovies failed, using fallback:', e);
+        console.warn('TMDB searchMovies failed:', e);
         return FALLBACK_CATALOG;
       }
     },
 
     async getMovieById(id) {
+      // First attempt movie lookup
       try {
         const data = await tmdbFetch(`/movie/${id}`, { append_to_response: 'credits' });
-        const movie = formatMovie(data);
+        const movie = formatMedia(data);
         if (data.credits) {
           const director = (data.credits.crew || []).find(c => c.job === 'Director');
           if (director) movie.director = director.name;
@@ -125,8 +136,20 @@ window.CineStream = window.CineStream || {};
         }
         return movie;
       } catch (e) {
-        console.warn('TMDB getMovieById failed, using fallback:', e);
-        return FALLBACK_CATALOG[0];
+        // If movie fails, attempt TV show lookup
+        try {
+          const tvData = await tmdbFetch(`/tv/${id}`, { append_to_response: 'credits' });
+          const tvShow = formatMedia({ ...tvData, media_type: 'tv' });
+          if (tvData.credits) {
+            const creator = (tvData.created_by || [])[0];
+            if (creator) tvShow.director = creator.name;
+            tvShow.cast = (tvData.credits.cast || []).slice(0, 6).map(c => c.name);
+          }
+          return tvShow;
+        } catch (err) {
+          console.warn('TMDB getMovieById failed for both movie and TV:', err);
+          return FALLBACK_CATALOG[0];
+        }
       }
     },
 
