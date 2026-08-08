@@ -58,7 +58,7 @@ function renderMovieDetails(movie, watchDetails, storage) {
 
   if (watchBtn) {
     const type = movie.mediaType || 'movie';
-    watchBtn.href = `./watch.html?id=${encodeURIComponent(movie.id)}&type=${type}`;
+    watchBtn.href = `./watch.html?id=${encodeURIComponent(movie.id)}&type=${type}&v=1.0.1`;
   }
 
   if (trailerIframe && watchDetails.playback && watchDetails.playback.trailerUrl) {
