@@ -1,7 +1,7 @@
 /**
  * videoProvider.js - Client-Side Multi-Server Embed Provider
- * Features clean, ad-free video players (Videasy, VidLink, VidBinge)
- * with auto-synced subtitles matching voice audio tracks.
+ * Features top-tier ad-free video players (VidLink, Videasy, VidBinge)
+ * with multi-language subtitle tracks.
  */
 
 window.CineStream = window.CineStream || {};
@@ -36,23 +36,23 @@ window.CineStream = window.CineStream || {};
     }
   };
 
-  // Clean, Ad-Free & Subtitle-Synced Video Stream Servers
+  // Clean, Ad-Free & Subtitle-Supported Video Stream Servers
   const EMBED_SERVERS = [
     {
-      id: 'videasy',
-      name: 'Server 1 (Videasy — Ad-Free + Synced Subs)',
-      getMovieUrl: (id) => `https://player.videasy.net/movie/${id}`,
-      getTvUrl: (id, s = 1, e = 1) => `https://player.videasy.net/tv/${id}/${s}/${e}`
-    },
-    {
       id: 'vidlink',
-      name: 'Server 2 (VidLink — 1080p Clean)',
+      name: 'Server 1 (VidLink — 1080p + Subtitles)',
       getMovieUrl: (id) => `https://vidlink.pro/movie/${id}?primaryColor=ff69b0&secondaryColor=ffb6c1&iconColor=ff69b0`,
       getTvUrl: (id, s = 1, e = 1) => `https://vidlink.pro/tv/${id}/${s}/${e}?primaryColor=ff69b0&secondaryColor=ffb6c1&iconColor=ff69b0`
     },
     {
+      id: 'videasy',
+      name: 'Server 2 (Videasy — Multi-Language Captions)',
+      getMovieUrl: (id) => `https://player.videasy.net/movie/${id}`,
+      getTvUrl: (id, s = 1, e = 1) => `https://player.videasy.net/tv/${id}/${s}/${e}`
+    },
+    {
       id: 'vidbinge',
-      name: 'Server 3 (VidBinge — Open-Source)',
+      name: 'Server 3 (VidBinge — Open-Source Player)',
       getMovieUrl: (id) => `https://vidbinge.dev/embed/movie/${id}`,
       getTvUrl: (id, s = 1, e = 1) => `https://vidbinge.dev/embed/tv/${id}/${s}/${e}`
     },
