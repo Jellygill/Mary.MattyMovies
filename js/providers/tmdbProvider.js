@@ -1,6 +1,6 @@
 /**
  * tmdbProvider.js - Client-Side TMDB API Provider
- * Support full multi-search (Movies, TV Shows, Anime) and detailed lookup by type.
+ * Intelligent resolution for Movies vs TV Shows, preventing ID collisions.
  */
 
 window.CineStream = window.CineStream || {};
@@ -54,7 +54,6 @@ window.CineStream = window.CineStream || {};
       rating:      m.vote_average ? parseFloat(m.vote_average.toFixed(1)) : 0,
       voteCount:   m.vote_count || 0,
       runtime:     m.runtime ? `${m.runtime} min` : (m.episode_run_time && m.episode_run_time[0] ? `${m.episode_run_time[0]} min` : null),
-      genres,
       director:    m.director || null,
       cast:        m.cast || [],
       tagline:     m.tagline || '',
@@ -124,7 +123,7 @@ window.CineStream = window.CineStream || {};
     },
 
     async getMovieById(id, mediaType = null) {
-      // If type is explicitly 'tv', query TV endpoint directly
+      // 1. If mediaType is explicitly 'tv', fetch TV directly
       if (mediaType === 'tv') {
         try {
           const tvData = await tmdbFetch(`/tv/${id}`, { append_to_response: 'credits' });
@@ -140,20 +139,57 @@ window.CineStream = window.CineStream || {};
         }
       }
 
-      // Default or 'movie' query
-      try {
-        const data = await tmdbFetch(`/movie/${id}`, { append_to_response: 'credits' });
-        const movie = formatMedia(data, 'movie');
-        if (data.credits) {
-          const director = (data.credits.crew || []).find(c => c.job === 'Director');
-          if (director) movie.director = director.name;
-          movie.cast = (data.credits.cast || []).slice(0, 6).map(c => c.name);
-        }
-        return movie;
-      } catch (e) {
-        // Fallback to TV if movie 404s
+      // 2. If mediaType is explicitly 'movie', fetch Movie directly
+      if (mediaType === 'movie') {
         try {
-          const tvData = await tmdbFetch(`/tv/${id}`, { append_to_response: 'credits' });
+          const movieData = await tmdbFetch(`/movie/${id}`, { append_to_response: 'credits' });
+          const movie = formatMedia(movieData, 'movie');
+          if (movieData.credits) {
+            const director = (movieData.credits.crew || []).find(c => c.job === 'Director');
+            if (director) movie.director = director.name;
+            movie.cast = (movieData.credits.cast || []).slice(0, 6).map(c => c.name);
+          }
+          return movie;
+        } catch (e) {
+          console.warn('TMDB Movie fetch failed:', e);
+        }
+      }
+
+      // 3. If mediaType is unknown/null, fetch BOTH concurrently and resolve by popularity
+      try {
+        const [movieRes, tvRes] = await Promise.allSettled([
+          tmdbFetch(`/movie/${id}`, { append_to_response: 'credits' }),
+          tmdbFetch(`/tv/${id}`, { append_to_response: 'credits' })
+        ]);
+
+        const movieData = movieRes.status === 'fulfilled' ? movieRes.value : null;
+        const tvData    = tvRes.status    === 'fulfilled' ? tvRes.value    : null;
+
+        if (movieData && tvData) {
+          // Both exist (ID collision). Pick the one with higher popularity/vote_count
+          const movieScore = (movieData.vote_count || 0) + (movieData.popularity || 0);
+          const tvScore    = (tvData.vote_count || 0) + (tvData.popularity || 0);
+
+          if (tvScore > movieScore) {
+            const tvShow = formatMedia(tvData, 'tv');
+            if (tvData.credits) {
+              const creator = (tvData.created_by || [])[0];
+              if (creator) tvShow.director = creator.name;
+              tvShow.cast = (tvData.credits.cast || []).slice(0, 6).map(c => c.name);
+            }
+            return tvShow;
+          } else {
+            const movie = formatMedia(movieData, 'movie');
+            if (movieData.credits) {
+              const director = (movieData.credits.crew || []).find(c => c.job === 'Director');
+              if (director) movie.director = director.name;
+              movie.cast = (movieData.credits.cast || []).slice(0, 6).map(c => c.name);
+            }
+            return movie;
+          }
+        }
+
+        if (tvData) {
           const tvShow = formatMedia(tvData, 'tv');
           if (tvData.credits) {
             const creator = (tvData.created_by || [])[0];
@@ -161,11 +197,22 @@ window.CineStream = window.CineStream || {};
             tvShow.cast = (tvData.credits.cast || []).slice(0, 6).map(c => c.name);
           }
           return tvShow;
-        } catch (err) {
-          console.warn('TMDB lookup failed for both movie and TV:', err);
-          return FALLBACK_CATALOG[0];
         }
+
+        if (movieData) {
+          const movie = formatMedia(movieData, 'movie');
+          if (movieData.credits) {
+            const director = (movieData.credits.crew || []).find(c => c.job === 'Director');
+            if (director) movie.director = director.name;
+            movie.cast = (movieData.credits.cast || []).slice(0, 6).map(c => c.name);
+          }
+          return movie;
+        }
+      } catch (err) {
+        console.warn('TMDB dual lookup failed:', err);
       }
+
+      return FALLBACK_CATALOG[0];
     },
 
     getAllMovies() {
