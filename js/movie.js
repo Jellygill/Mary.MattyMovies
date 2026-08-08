@@ -67,11 +67,11 @@ function renderMovieDetails(movie, watchDetails, storage) {
   function updateWatchlistUI() {
     const inList = storage.isInWatchlist(movie.id);
     if (inList) {
-      toggleWatchlistBtn.innerHTML = '<i class="fa-solid fa-check"></i> <span>In Watchlist</span>';
+      toggleWatchlistBtn.innerHTML = '<i class="fa-solid fa-heart" style="color: var(--accent-pink);"></i> <span>In Our Watchlist 💕</span>';
       toggleWatchlistBtn.style.borderColor = 'var(--accent-pink)';
       toggleWatchlistBtn.style.color = 'var(--accent-pink)';
     } else {
-      toggleWatchlistBtn.innerHTML = '<i class="fa-solid fa-plus"></i> <span>Add to Watchlist</span>';
+      toggleWatchlistBtn.innerHTML = '<i class="fa-solid fa-plus"></i> <span>Add to Our Watchlist 💕</span>';
       toggleWatchlistBtn.style.borderColor = 'var(--border-subtle)';
       toggleWatchlistBtn.style.color = '#ffffff';
     }

@@ -1,7 +1,8 @@
 /**
  * app.js - Home Page Controller
  * Handles hero banner initialization, movie row rendering,
- * watchlist sync, continue watching progress, and carousel scrolling.
+ * watchlist sync, continue watching progress, date night movie spinner,
+ * and My Melody floating companion widget.
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -12,9 +13,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const siteHeader = document.getElementById('siteHeader');
   window.addEventListener('scroll', () => {
     if (window.scrollY > 40) {
-      siteHeader.classList.add('scrolled');
+      siteHeader?.classList.add('scrolled');
     } else {
-      siteHeader.classList.remove('scrolled');
+      siteHeader?.classList.remove('scrolled');
     }
   });
 
@@ -28,8 +29,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupCarouselControls('trendingPrev', 'trendingNext', 'trendingGrid');
   setupCarouselControls('popularPrev', 'popularNext', 'popularGrid');
 
+  // Interactive Features
+  initDateNightSpinner(provider);
+  initMelodyCompanion(provider);
+
   // Watchlist & Progress Updates Listeners
-  window.addEventListener('cinestream:watchlist-updated', () => {
+  window.addEventListener('cinestream:watchlist-updated', (e) => {
     renderWatchlist(storage);
     updateHeroWatchlistBtnState(storage);
   });
@@ -77,7 +82,8 @@ async function initHero(provider, storage) {
 
     if (watchlistBtn) {
       watchlistBtn.onclick = () => {
-        storage.toggleWatchlist(hero);
+        const added = storage.toggleWatchlist(hero);
+        showCoupleToast(added ? `Added "${hero.title}" to Our Watchlist 💕` : `Removed from Our Watchlist 💕`);
       };
       updateHeroWatchlistBtnState(storage, hero.id);
     }
@@ -91,11 +97,11 @@ function updateHeroWatchlistBtnState(storage, heroId = 'tears-of-steel') {
   if (!watchlistBtn) return;
   const inList = storage.isInWatchlist(heroId);
   if (inList) {
-    watchlistBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
-    watchlistBtn.style.color = 'var(--accent-pink)';
+    watchlistBtn.innerHTML = '<i class="fa-solid fa-heart" style="color: var(--accent-pink);"></i>';
+    watchlistBtn.title = 'In Our Watchlist 💕';
   } else {
-    watchlistBtn.innerHTML = '<i class="fa-solid fa-plus"></i>';
-    watchlistBtn.style.color = '#ffffff';
+    watchlistBtn.innerHTML = '<i class="fa-solid fa-heart-crack"></i>';
+    watchlistBtn.title = 'Add to Our Watchlist 💕';
   }
 }
 
@@ -177,9 +183,12 @@ function renderWatchlist(storage) {
 
   if (watchlist.length === 0) {
     container.innerHTML = `
-      <div style="padding: 24px; color: var(--text-muted); text-align: center; width: 100%;">
-        <i class="fa-solid fa-bookmark" style="font-size: 1.8rem; margin-bottom: 8px; opacity: 0.5;"></i>
-        <p>Your watchlist is currently empty. Click <strong>+ Watchlist</strong> on any movie to save it here!</p>
+      <div class="empty-watchlist-box">
+        <img src="./assets/images/melody_watchlist.png" alt="My Melody Watchlist" class="empty-watchlist-img" style="width: 130px; height: auto;">
+        <p style="font-size: 1.15rem; color: var(--text-primary); font-weight: 700; margin-top: 8px;">Our Watchlist is currently empty 💕</p>
+        <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 420px; margin: 0 auto;">
+          Click <strong><i class="fa-solid fa-heart" style="color: var(--accent-pink);"></i> Add to Our Watchlist</strong> on any movie to save it for Mary & Matty's next date night!
+        </p>
       </div>
     `;
     return;
@@ -229,4 +238,133 @@ function setupCarouselControls(prevBtnId, nextBtnId, containerId) {
   next.onclick = () => {
     container.scrollBy({ left: 460, behavior: 'smooth' });
   };
+}
+
+/**
+ * Date Night Random Movie Spinner Logic
+ */
+function initDateNightSpinner(provider) {
+  const openBtn = document.getElementById('openSpinnerBtn');
+  const closeBtn = document.getElementById('closeSpinnerBtn');
+  const spinAgainBtn = document.getElementById('spinAgainBtn');
+  const modal = document.getElementById('spinnerModal');
+  const wheel = document.getElementById('spinnerWheel');
+  const resultTitle = document.getElementById('spinnerResultTitle');
+  const resultSub = document.getElementById('spinnerResultSub');
+  const watchBtn = document.getElementById('watchSpinResultBtn');
+
+  if (!openBtn || !modal) return;
+
+  const openModalAndSpin = async () => {
+    modal.classList.add('open');
+    await runSpinnerAnimation(provider);
+  };
+
+  openBtn.onclick = openModalAndSpin;
+  spinAgainBtn.onclick = () => runSpinnerAnimation(provider);
+  closeBtn.onclick = () => modal.classList.remove('open');
+
+  modal.onclick = (e) => {
+    if (e.target === modal) modal.classList.remove('open');
+  };
+}
+
+async function runSpinnerAnimation(provider) {
+  const wheel = document.getElementById('spinnerWheel');
+  const resultTitle = document.getElementById('spinnerResultTitle');
+  const resultSub = document.getElementById('spinnerResultSub');
+  const watchBtn = document.getElementById('watchSpinResultBtn');
+
+  if (!wheel || !resultTitle) return;
+
+  // Reset state
+  wheel.classList.add('spinning');
+  resultTitle.textContent = 'My Melody is picking a movie... 🎀';
+  resultSub.textContent = 'Randomizing Mary & Matty\'s date night choice!';
+  if (watchBtn) watchBtn.style.display = 'none';
+
+  try {
+    const trending = await provider.getTrending();
+    const popular = await provider.getPopular();
+    const pool = [...trending, ...popular];
+
+    setTimeout(() => {
+      wheel.classList.remove('spinning');
+      if (pool.length > 0) {
+        const picked = pool[Math.floor(Math.random() * pool.length)];
+        resultTitle.innerHTML = `<i class="fa-solid fa-heart" style="color: var(--accent-pink);"></i> ${picked.title}`;
+        resultSub.textContent = `${picked.year} • Rating ${picked.rating} • Perfect choice for tonight!`;
+        if (watchBtn) {
+          watchBtn.href = `./watch.html?id=${encodeURIComponent(picked.id)}`;
+          watchBtn.style.display = 'inline-flex';
+        }
+      } else {
+        resultTitle.textContent = 'Tears of Steel';
+        resultSub.textContent = 'Our featured classic!';
+      }
+    }, 1200);
+  } catch (e) {
+    wheel.classList.remove('spinning');
+    resultTitle.textContent = 'Ready for Date Night!';
+    resultSub.textContent = 'Click below to watch our premiere movie.';
+  }
+}
+
+/**
+ * Interactive My Melody Floating Companion Widget
+ */
+function initMelodyCompanion(provider) {
+  const btn = document.getElementById('melodyBtn');
+  const card = document.getElementById('melodyCard');
+  const closeBtn = document.getElementById('closeMelodyCard');
+  const body = document.getElementById('melodyCardBody');
+  const spinAction = document.getElementById('melodySpinActionBtn');
+
+  if (!btn || !card) return;
+
+  const melodyQuotes = [
+    `"Ready for movie night, Mary & Matty? Don't forget to grab the popcorn and cozy up together! 🎀🍿"`,
+    `"My Melody says: Every date night with you two is full of love and magic! 💕"`,
+    `"Can't decide what to watch? Use the Date Night Spinner for a surprise movie! 🎲"`,
+    `"Remember to add your favorite movies to Our Watchlist so we never run out of date night ideas! 💖"`
+  ];
+
+  let currentQuoteIdx = 0;
+
+  btn.onclick = () => {
+    currentQuoteIdx = (currentQuoteIdx + 1) % melodyQuotes.length;
+    if (body) body.textContent = melodyQuotes[currentQuoteIdx];
+    card.classList.toggle('open');
+  };
+
+  if (closeBtn) {
+    closeBtn.onclick = (e) => {
+      e.stopPropagation();
+      card.classList.remove('open');
+    };
+  }
+
+  if (spinAction) {
+    spinAction.onclick = () => {
+      card.classList.remove('open');
+      const openSpinner = document.getElementById('openSpinnerBtn');
+      if (openSpinner) openSpinner.click();
+    };
+  }
+}
+
+/**
+ * Toast Notification Popup Helper
+ */
+function showCoupleToast(message) {
+  const toast = document.getElementById('coupleToast');
+  const msgEl = document.getElementById('toastMessage');
+  if (!toast || !msgEl) return;
+
+  msgEl.textContent = message;
+  toast.classList.add('show');
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2800);
 }

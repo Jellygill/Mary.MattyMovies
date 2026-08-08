@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Mary.MattyMovies - Dark Pink & Rose Obsidian Design System & Stylesheet
+   Mary.MattyMovies - Romantic Pink & My Melody Theme Stylesheet
    ========================================================================== */
 
 /* Google Fonts Import */
@@ -13,7 +13,7 @@
   --bg-card-hover: #2f1425;
   --bg-glass: rgba(24, 11, 19, 0.85);
   --bg-glass-heavy: rgba(14, 6, 10, 0.95);
-  --border-subtle: rgba(255, 182, 217, 0.15);
+  --border-subtle: rgba(255, 182, 217, 0.2);
   --border-active: rgba(255, 105, 180, 0.6);
 
   --accent-pink: #ff69b4;
@@ -36,7 +36,7 @@
   --radius-full: 9999px;
 
   --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.7);
-  --shadow-glow: 0 0 25px rgba(255, 105, 180, 0.4);
+  --shadow-glow: 0 0 25px rgba(255, 105, 180, 0.45);
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -62,6 +62,26 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  position: relative;
+}
+
+/* Floating Heart Pulse Keyframes */
+@keyframes heartPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes cuteFloat {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(3deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.heart-pulse {
+  display: inline-block;
+  color: var(--accent-pink);
+  animation: heartPulse 1.8s infinite ease-in-out;
 }
 
 a {
@@ -90,12 +110,12 @@ img {
   left: 0;
   right: 0;
   z-index: 1000;
-  height: 76px;
+  height: 78px;
   padding: 0 4%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(180deg, rgba(14, 6, 10, 0.95) 0%, rgba(14, 6, 10, 0.5) 70%, transparent 100%);
+  background: linear-gradient(180deg, rgba(14, 6, 10, 0.95) 0%, rgba(14, 6, 10, 0.6) 70%, transparent 100%);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border-subtle);
@@ -113,14 +133,14 @@ img {
   align-items: center;
   gap: 12px;
   font-family: var(--font-family-heading);
-  font-size: 1.6rem;
+  font-size: 1.65rem;
   font-weight: 800;
   letter-spacing: -0.5px;
 }
 
 .brand-icon-img {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid var(--accent-pink);
@@ -129,12 +149,26 @@ img {
 }
 
 .nav-brand:hover .brand-icon-img {
-  transform: scale(1.1) rotate(5deg);
+  transform: scale(1.1) rotate(6deg);
 }
 
 .brand-title span {
   color: var(--accent-pink);
-  text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+  text-shadow: 0 0 12px rgba(255, 105, 180, 0.6);
+}
+
+.nav-subtitle-tag {
+  font-size: 0.75rem;
+  color: var(--accent-soft-pink);
+  font-weight: 600;
+  margin-left: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 105, 180, 0.15);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 105, 180, 0.3);
 }
 
 .nav-links {
@@ -198,9 +232,9 @@ img {
 .hero-banner {
   position: relative;
   width: 100%;
-  height: 82vh;
-  min-height: 540px;
-  max-height: 780px;
+  height: 84vh;
+  min-height: 550px;
+  max-height: 800px;
   margin-top: 0;
   display: flex;
   align-items: flex-end;
@@ -215,14 +249,35 @@ img {
   inset: 0;
   background: 
     linear-gradient(0deg, var(--bg-primary) 0%, rgba(14, 6, 10, 0.65) 45%, rgba(14, 6, 10, 0.35) 100%),
-    linear-gradient(90deg, var(--bg-primary) 0%, rgba(14, 6, 10, 0.85) 35%, transparent 70%);
+    linear-gradient(90deg, var(--bg-primary) 0%, rgba(14, 6, 10, 0.88) 35%, transparent 70%);
   z-index: 1;
+}
+
+/* My Melody Floating Peeking Sticker */
+.melody-hero-sticker {
+  position: absolute;
+  right: 5%;
+  bottom: 40px;
+  z-index: 3;
+  width: 220px;
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 10px 20px rgba(255, 105, 180, 0.4));
+  animation: cuteFloat 4s ease-in-out infinite;
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 650px;
+  max-width: 680px;
+}
+
+.hero-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
 .hero-badge {
@@ -238,18 +293,31 @@ img {
   font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  margin-bottom: 16px;
   box-shadow: 0 0 12px rgba(255, 105, 180, 0.3);
+}
+
+.hero-couple-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  background: linear-gradient(135deg, rgba(255, 105, 180, 0.3) 0%, rgba(255, 20, 147, 0.3) 100%);
+  border: 1px solid var(--accent-pink);
+  color: #ffffff;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-glow);
 }
 
 .hero-title {
   font-family: var(--font-family-heading);
-  font-size: 3.6rem;
+  font-size: 3.7rem;
   font-weight: 800;
   line-height: 1.05;
   letter-spacing: -1px;
   margin-bottom: 14px;
-  text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+  text-shadow: 0 4px 18px rgba(0,0,0,0.8);
 }
 
 .hero-meta {
@@ -285,7 +353,7 @@ img {
 
 .hero-description {
   font-size: 1.05rem;
-  line-height: 1.5;
+  line-height: 1.55;
   color: var(--text-secondary);
   margin-bottom: 28px;
   display: -webkit-box;
@@ -350,7 +418,7 @@ img {
   padding: 20px 4% 80px 4%;
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 52px;
 }
 
 .section-header {
@@ -367,18 +435,21 @@ img {
 }
 
 .section-indicator {
-  width: 4px;
-  height: 24px;
+  width: 5px;
+  height: 26px;
   background: var(--accent-pink);
-  border-radius: 2px;
-  box-shadow: 0 0 10px var(--accent-pink);
+  border-radius: 3px;
+  box-shadow: 0 0 12px var(--accent-pink);
 }
 
 .section-title {
   font-family: var(--font-family-heading);
-  font-size: 1.5rem;
+  font-size: 1.55rem;
   font-weight: 700;
   letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* --- Carousel Controls --- */
@@ -389,7 +460,7 @@ img {
 
 .movie-row-grid {
   display: flex;
-  gap: 20px;
+  gap: 22px;
   overflow-x: auto;
   scroll-behavior: smooth;
   padding: 10px 4px 20px 4px;
@@ -441,8 +512,8 @@ img {
 
 /* --- Movie Card Component --- */
 .movie-card {
-  flex: 0 0 210px;
-  width: 210px;
+  flex: 0 0 215px;
+  width: 215px;
   display: flex;
   flex-direction: column;
   background: var(--bg-card);
@@ -455,8 +526,8 @@ img {
 }
 
 .movie-card:hover {
-  transform: translateY(-8px) scale(1.03);
-  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 105, 180, 0.3);
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 105, 180, 0.35);
   border-color: var(--accent-pink);
 }
 
@@ -500,8 +571,8 @@ img {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0.7);
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   background: var(--accent-gradient);
   border-radius: 50%;
   display: flex;
@@ -560,8 +631,8 @@ img {
 
 /* --- Progress Card --- */
 .movie-card.progress-card {
-  flex: 0 0 280px;
-  width: 280px;
+  flex: 0 0 290px;
+  width: 290px;
 }
 
 .movie-card.progress-card .card-poster-wrapper {
@@ -570,7 +641,7 @@ img {
 
 .progress-bar-container {
   width: 100%;
-  height: 4px;
+  height: 5px;
   background: rgba(255, 182, 217, 0.15);
   position: relative;
   overflow: hidden;
@@ -583,9 +654,30 @@ img {
 }
 
 .resume-tag {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   color: var(--accent-soft-pink);
   font-weight: 600;
+}
+
+/* --- Empty Watchlist Sticker Box --- */
+.empty-watchlist-box {
+  width: 100%;
+  padding: 36px;
+  background: rgba(34, 14, 26, 0.6);
+  border: 1px dashed rgba(255, 105, 180, 0.3);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.empty-watchlist-img {
+  width: 100px;
+  height: auto;
+  filter: drop-shadow(0 0 12px rgba(255, 105, 180, 0.4));
+  animation: cuteFloat 3s ease-in-out infinite;
 }
 
 /* --- Search Modal & Dropdown --- */
@@ -713,7 +805,7 @@ img {
 /* --- Details Page Layout (`movie.html`) --- */
 .details-page-wrapper {
   min-height: 100vh;
-  padding-top: 76px;
+  padding-top: 78px;
 }
 
 .details-hero {
@@ -1032,6 +1124,10 @@ img {
     height: 72vh;
     padding-bottom: 40px;
   }
+  .melody-hero-sticker {
+    width: 140px;
+    bottom: 20px;
+  }
   .hero-title {
     font-size: 2.2rem;
   }
@@ -1056,3 +1152,293 @@ img {
     width: 230px;
   }
 }
+
+/* --- My Melody Interactive Floating Companion Widget --- */
+.melody-companion-widget {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 1800;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.melody-companion-btn {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2px solid var(--accent-pink);
+  box-shadow: 0 8px 30px rgba(255, 105, 180, 0.5), 0 0 15px rgba(255, 182, 217, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  animation: cuteBounce 3.5s ease-in-out infinite;
+}
+
+.melody-companion-btn:hover {
+  transform: scale(1.15) rotate(6deg);
+  box-shadow: 0 12px 35px rgba(255, 105, 180, 0.7), 0 0 25px rgba(255, 105, 180, 0.8);
+}
+
+.melody-companion-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.melody-companion-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--accent-gradient);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 10px;
+  border: 1px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Companion Popup Card */
+.melody-companion-card {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  width: 320px;
+  background: rgba(30, 12, 23, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--accent-pink);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 105, 180, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(15px) scale(0.95);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.melody-companion-card.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.melody-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 182, 217, 0.2);
+  padding-bottom: 8px;
+}
+
+.melody-card-title {
+  font-family: var(--font-family-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.melody-card-close {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.melody-card-close:hover {
+  color: var(--accent-pink);
+}
+
+.melody-card-body {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.melody-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* --- Date Night Random Movie Spinner --- */
+.date-night-spinner-card {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(47, 18, 36, 0.85) 0%, rgba(26, 9, 20, 0.9) 100%);
+  border: 1px solid var(--accent-pink);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255, 105, 180, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.date-night-spinner-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 105, 180, 0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.spinner-content-left {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 540px;
+  position: relative;
+  z-index: 2;
+}
+
+.spinner-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 105, 180, 0.2);
+  color: var(--accent-soft-pink);
+  border: 1px solid rgba(255, 105, 180, 0.4);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  width: fit-content;
+}
+
+.spinner-title {
+  font-family: var(--font-family-heading);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.spinner-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.spinner-artwork-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.melody-spinner-img {
+  width: 140px;
+  height: auto;
+  filter: drop-shadow(0 8px 20px rgba(255, 105, 180, 0.4));
+  animation: cuteBounce 4s ease-in-out infinite;
+}
+
+/* Spinner Modal */
+.spinner-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2100;
+  background: rgba(14, 6, 10, 0.92);
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.spinner-modal-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.spinner-modal-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--bg-card);
+  border: 2px solid var(--accent-pink);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  text-align: center;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.9), 0 0 35px rgba(255, 105, 180, 0.4);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.spinner-wheel-wrapper {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 4px dashed var(--accent-pink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: rgba(255, 105, 180, 0.08);
+}
+
+.spinner-wheel-wrapper.spinning {
+  animation: spinWheel 1.2s cubic-bezier(0.15, 0.85, 0.35, 1.2) infinite;
+}
+
+@keyframes spinWheel {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(1440deg); }
+}
+
+@keyframes cuteBounce {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Toast Notifications */
+.couple-toast {
+  position: fixed;
+  top: 90px;
+  right: 28px;
+  z-index: 2200;
+  background: rgba(34, 14, 26, 0.95);
+  border: 1px solid var(--accent-pink);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(255, 105, 180, 0.5);
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  backdrop-filter: blur(12px);
+  transform: translateX(120%);
+  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.couple-toast.show {
+  transform: translateX(0);
+}
+

@@ -3,26 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mary.MattyMovies - Personal Movie Streaming</title>
-  <meta name="description" content="A modern, responsive, cinematic movie streaming platform inspired by premium streaming experiences.">
-  <meta name="theme-color" content="#07080b">
+  <title>Mary.MattyMovies 💕 - Personal Movie Streaming</title>
+  <meta name="description" content="Movie night streaming platform made with love for Mary & Matty.">
+  <meta name="theme-color" content="#0e060a">
   <link rel="stylesheet" href="./css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-  <!-- Top Glassmorphic Navigation Header -->
+  <!-- Top Navigation Header -->
   <header class="site-header" id="siteHeader">
     <a href="./index.html" class="nav-brand">
       <img src="./assets/images/logo.jpg" alt="Mary.MattyMovies Logo" class="brand-icon-img">
       <div class="brand-title">Mary.Matty<span>Movies</span></div>
+      <span class="nav-subtitle-tag"><i class="fa-solid fa-heart heart-pulse"></i> Mary & Matty</span>
     </a>
 
     <ul class="nav-links">
       <li><a href="./index.html" class="nav-link active">Home</a></li>
       <li><a href="#trending-section" class="nav-link">Trending</a></li>
       <li><a href="#popular-section" class="nav-link">Popular</a></li>
-      <li><a href="#watchlist-section" class="nav-link">My Watchlist</a></li>
+      <li><a href="#watchlist-section" class="nav-link"><i class="fa-solid fa-heart" style="color: var(--accent-pink);"></i> Our Watchlist</a></li>
     </ul>
 
     <div class="nav-actions">
@@ -36,8 +37,15 @@
   <!-- Featured Hero Banner Section -->
   <section class="hero-banner" id="heroBanner">
     <div class="hero-backdrop-overlay"></div>
+
+    <!-- Cute My Melody Sticker Peeking -->
+    <img src="./assets/images/melody_peek.png" alt="My Melody" class="melody-hero-sticker">
+
     <div class="hero-content">
-      <div class="hero-badge"><i class="fa-solid fa-star"></i> Featured Premiere</div>
+      <div class="hero-badge-group">
+        <div class="hero-couple-tag"><i class="fa-solid fa-heart heart-pulse"></i> Mary & Matty's Date Night Pick</div>
+        <div class="hero-badge"><i class="fa-solid fa-star"></i> Featured Premiere</div>
+      </div>
       <h1 class="hero-title" id="heroTitle">Tears of Steel</h1>
       <div class="hero-meta">
         <span class="rating-pill"><i class="fa-solid fa-star"></i> <span id="heroRating">7.8</span></span>
@@ -53,13 +61,13 @@
       </p>
       <div class="hero-actions">
         <a href="./watch.html?id=tears-of-steel" class="btn btn-primary" id="heroWatchBtn">
-          <i class="fa-solid fa-play"></i> Watch Now
+          <i class="fa-solid fa-play"></i> Watch Now Together
         </a>
         <a href="./movie.html?id=tears-of-steel" class="btn btn-secondary" id="heroInfoBtn">
           <i class="fa-solid fa-circle-info"></i> More Info
         </a>
-        <button class="btn btn-secondary btn-icon-only" id="heroWatchlistBtn" title="Add to Watchlist">
-          <i class="fa-solid fa-plus"></i>
+        <button class="btn btn-secondary btn-icon-only" id="heroWatchlistBtn" title="Add to Our Watchlist">
+          <i class="fa-solid fa-heart"></i>
         </button>
       </div>
     </div>
@@ -68,12 +76,27 @@
   <!-- Main Content Container -->
   <main class="main-container">
 
+    <!-- Date Night Movie Spinner Section -->
+    <section class="date-night-spinner-card">
+      <div class="spinner-content-left">
+        <div class="spinner-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> Date Night Picker 🎀</div>
+        <h2 class="spinner-title">Can't decide what to watch tonight?</h2>
+        <p class="spinner-subtitle">Let My Melody randomly pick a surprise date night movie for Mary & Matty from our curated collection!</p>
+        <button class="btn btn-primary" id="openSpinnerBtn" style="margin-top: 8px; width: fit-content;">
+          <i class="fa-solid fa-dice"></i> Spin for Date Night Movie!
+        </button>
+      </div>
+      <div class="spinner-artwork-right">
+        <img src="./assets/images/melody_date_night.png" alt="My Melody Date Night Popcorn" class="melody-spinner-img">
+      </div>
+    </section>
+
     <!-- Continue Watching Section (Hidden if empty) -->
     <section class="category-section" id="continue-watching-section" style="display: none;">
       <div class="section-header">
         <div class="section-title-group">
           <div class="section-indicator"></div>
-          <h2 class="section-title">Continue Watching</h2>
+          <h2 class="section-title">Our Date Night Progress <i class="fa-solid fa-heart heart-pulse"></i></h2>
         </div>
       </div>
       <div class="carousel-wrapper">
@@ -88,7 +111,7 @@
       <div class="section-header">
         <div class="section-title-group">
           <div class="section-indicator"></div>
-          <h2 class="section-title">Trending Now</h2>
+          <h2 class="section-title">Trending Movies</h2>
         </div>
       </div>
       <div class="carousel-wrapper">
@@ -125,12 +148,12 @@
       </div>
     </section>
 
-    <!-- My Watchlist Section -->
+    <!-- Our Watchlist Section -->
     <section class="category-section" id="watchlist-section">
       <div class="section-header">
         <div class="section-title-group">
           <div class="section-indicator"></div>
-          <h2 class="section-title">My Watchlist</h2>
+          <h2 class="section-title">Our Watchlist <i class="fa-solid fa-heart heart-pulse"></i></h2>
         </div>
       </div>
       <div class="carousel-wrapper">
@@ -149,14 +172,62 @@
       <input type="text" class="search-input-field" id="searchInput" placeholder="Search title, genre, or keyword..." autocomplete="off">
       <button class="search-close-btn" id="closeSearchBtn"><i class="fa-solid fa-xmark"></i></button>
     </div>
-    <div class="search-results-wrapper" id="searchResultsContainer">
-      <!-- Search results injected here -->
+    <div class="search-results-wrapper" id="searchResultsContainer"></div>
+  </div>
+
+  <!-- Interactive My Melody Floating Companion Widget -->
+  <div class="melody-companion-widget" id="melodyWidget">
+    <div class="melody-companion-card" id="melodyCard">
+      <div class="melody-card-header">
+        <div class="melody-card-title"><i class="fa-solid fa-heart heart-pulse"></i> My Melody's Love Note 🎀</div>
+        <i class="fa-solid fa-xmark melody-card-close" id="closeMelodyCard"></i>
+      </div>
+      <div class="melody-card-body" id="melodyCardBody">
+        "Ready for movie night, Mary & Matty? Don't forget to grab the popcorn and cozy up together!"
+      </div>
+      <div class="melody-card-actions">
+        <button class="btn btn-secondary" style="font-size: 0.8rem; padding: 6px 12px; width: 100%;" id="melodySpinActionBtn">
+          <i class="fa-solid fa-dice"></i> Pick a Surprise Movie!
+        </button>
+      </div>
     </div>
+    <button class="melody-companion-btn" id="melodyBtn" title="My Melody Date Night Companion 🎀">
+      <img src="./assets/images/melody_peek.png" alt="My Melody Avatar" class="melody-companion-avatar">
+      <span class="melody-companion-badge">💕</span>
+    </button>
+  </div>
+
+  <!-- Date Night Spinner Modal Backdrop -->
+  <div class="spinner-modal-backdrop" id="spinnerModal">
+    <div class="spinner-modal-card">
+      <div class="spinner-badge"><i class="fa-solid fa-heart heart-pulse"></i> Mary & Matty's Date Night Picker</div>
+      
+      <div class="spinner-wheel-wrapper" id="spinnerWheel">
+        <img src="./assets/images/melody_date_night.png" alt="My Melody Spinner" style="width: 80px; height: auto;">
+      </div>
+
+      <div id="spinnerResultBox" style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <h3 style="font-size: 1.3rem; font-weight: 700; color: #fff;" id="spinnerResultTitle">Spinning the Date Night Wheel...</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;" id="spinnerResultSub">My Melody is picking the best movie for tonight!</p>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 10px;">
+        <button class="btn btn-secondary" id="closeSpinnerBtn">Close</button>
+        <button class="btn btn-primary" id="spinAgainBtn"><i class="fa-solid fa-rotate"></i> Spin Again</button>
+        <a href="#" class="btn btn-primary" id="watchSpinResultBtn" style="display: none;"><i class="fa-solid fa-play"></i> Watch Movie</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Couple Toast Container -->
+  <div class="couple-toast" id="coupleToast">
+    <i class="fa-solid fa-heart heart-pulse" style="font-size: 1.2rem;"></i>
+    <span id="toastMessage">Updated Our Watchlist 💕</span>
   </div>
 
   <!-- Footer -->
   <footer style="padding: 40px 4%; border-top: 1px solid var(--border-subtle); color: var(--text-muted); font-size: 0.9rem; text-align: center; background: var(--bg-secondary);">
-    <p>© 2026 Mary.MattyMovies • Designed for personal movie streaming with legitimate open providers.</p>
+    <p>Made with <i class="fa-solid fa-heart heart-pulse"></i> for <strong>Mary & Matty's Movie Nights</strong> • © 2026 Mary.MattyMovies</p>
   </footer>
 
   <!-- Client JavaScript Modules -->
