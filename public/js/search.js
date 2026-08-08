@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     searchResultsContainer.innerHTML = results.map(item => `
-      <div class="search-result-item" onclick="window.location.href='./movie.html?id=${encodeURIComponent(item.id)}'">
+      <div class="search-result-item" onclick="window.location.href='./movie.html?id=${encodeURIComponent(item.id)}&type=${item.mediaType || 'movie'}'">
         <img class="search-result-thumb" src="${item.poster}" alt="${escapeHTML(item.title)}">
         <div class="search-result-info">
           <div class="search-result-title">${escapeHTML(item.title)}</div>

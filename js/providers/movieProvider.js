@@ -70,28 +70,29 @@ window.CineStream = window.CineStream || {};
       return Promise.all(movies.map(m => this._attachClientPlayback(m)));
     },
 
-    async getById(id) {
+    async getById(id, type = null) {
       const useApi = await checkServerApi();
       if (useApi) {
         const res = await fetch(`/api/movies/${encodeURIComponent(id)}`);
         const json = await res.json();
         return json.data;
       }
-      const movie = await window.CineStream.TMDBClientProvider.getMovieById(id);
+      const movie = await window.CineStream.TMDBClientProvider.getMovieById(id, type);
       return this._attachClientPlayback(movie);
     },
 
-    async getWatchDetails(id) {
+    async getWatchDetails(id, type = null) {
       const useApi = await checkServerApi();
       if (useApi) {
         const res = await fetch(`/api/watch/${encodeURIComponent(id)}`);
         const json = await res.json();
         return json.data;
       }
-      const movie = await window.CineStream.TMDBClientProvider.getMovieById(id);
-      const playback = await window.CineStream.VideoClientProvider.getPlaybackSource(movie.id, movie.mediaType);
+      const movie = await window.CineStream.TMDBClientProvider.getMovieById(id, type);
+      const playback = await window.CineStream.VideoClientProvider.getPlaybackSource(movie.id, movie.mediaType || type);
       return {
         id: movie.id,
+        mediaType: movie.mediaType || type,
         title: movie.title,
         year: movie.year,
         backdrop: movie.backdrop,

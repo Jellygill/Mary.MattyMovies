@@ -8,13 +8,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   const provider = window.CineStream.MovieProvider;
   const storage = window.CineStream.Storage;
 
-  // Extract ID from URL
+  // Extract ID & Type from URL
   const urlParams = new URLSearchParams(window.location.search);
   const movieId = urlParams.get('id') || 'tears-of-steel';
+  const mediaType = urlParams.get('type') || null;
 
   try {
-    const movie = await provider.getById(movieId);
-    const watchDetails = await provider.getWatchDetails(movieId);
+    const movie = await provider.getById(movieId, mediaType);
+    const watchDetails = await provider.getWatchDetails(movieId, mediaType);
 
     renderMovieDetails(movie, watchDetails, storage);
     loadSimilarMovies(provider, movie);
@@ -56,7 +57,8 @@ function renderMovieDetails(movie, watchDetails, storage) {
   }
 
   if (watchBtn) {
-    watchBtn.href = `./watch.html?id=${encodeURIComponent(movie.id)}`;
+    const type = movie.mediaType || 'movie';
+    watchBtn.href = `./watch.html?id=${encodeURIComponent(movie.id)}&type=${type}`;
   }
 
   if (trailerIframe && watchDetails.playback && watchDetails.playback.trailerUrl) {

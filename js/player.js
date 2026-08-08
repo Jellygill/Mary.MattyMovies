@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const urlParams = new URLSearchParams(window.location.search);
   const movieId = urlParams.get('id') || 'tears-of-steel';
+  const mediaType = urlParams.get('type') || null;
 
   const playerContainer = document.getElementById('playerContainer');
   const video = document.getElementById('mainVideoPlayer');
@@ -31,7 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const fullscreenBtn = document.getElementById('fullscreenBtn');
 
   try {
-    const watchData = await provider.getWatchDetails(movieId);
+    const watchData = await provider.getWatchDetails(movieId, mediaType);
     if (!watchData) return;
 
     playerTitle.textContent = `${watchData.title} (${watchData.year})`;

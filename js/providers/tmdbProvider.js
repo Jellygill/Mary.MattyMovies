@@ -1,6 +1,6 @@
 /**
  * tmdbProvider.js - Client-Side TMDB API Provider
- * Support full multi-search (Movies, TV Shows, Anime) and detailed lookup.
+ * Support full multi-search (Movies, TV Shows, Anime) and detailed lookup by type.
  */
 
 window.CineStream = window.CineStream || {};
@@ -36,8 +36,8 @@ window.CineStream = window.CineStream || {};
     return res.json();
   }
 
-  function formatMedia(m) {
-    const isTV = (m.media_type === 'tv') || (!m.title && Boolean(m.name));
+  function formatMedia(m, forceType = null) {
+    const isTV = forceType === 'tv' || m.media_type === 'tv' || (!m.title && Boolean(m.name));
     const title = isTV ? (m.name || m.original_name) : (m.title || m.original_title || 'Unknown');
     const dateStr = isTV ? m.first_air_date : m.release_date;
     const year = dateStr ? new Date(dateStr).getFullYear() : '—';
@@ -72,7 +72,7 @@ window.CineStream = window.CineStream || {};
     async getFeaturedMovies() {
       try {
         const data = await tmdbFetch('/movie/now_playing', { page: 1 });
-        const movies = (data.results || []).slice(0, 10).map(formatMedia);
+        const movies = (data.results || []).slice(0, 10).map(m => formatMedia(m, 'movie'));
         if (movies.length > 0) movies[0].isFeatured = true;
         return movies;
       } catch (e) {
@@ -97,7 +97,7 @@ window.CineStream = window.CineStream || {};
     async getPopularMovies() {
       try {
         const data = await tmdbFetch('/movie/popular', { page: 1 });
-        return (data.results || []).slice(0, 20).map(m => ({ ...formatMedia(m), isPopular: true }));
+        return (data.results || []).slice(0, 20).map(m => ({ ...formatMedia(m, 'movie'), isPopular: true }));
       } catch (e) {
         console.warn('TMDB getPopularMovies failed:', e);
         return FALLBACK_CATALOG;
@@ -108,11 +108,10 @@ window.CineStream = window.CineStream || {};
       try {
         if (!query.trim() && !genre) return this.getPopularMovies();
 
-        // Use multi search to get movies, tv shows, and anime
         const data = await tmdbFetch('/search/multi', { query: query.trim(), page: 1 });
         let results = (data.results || [])
           .filter(m => m.media_type === 'movie' || m.media_type === 'tv')
-          .map(formatMedia);
+          .map(m => formatMedia(m));
 
         if (genre) {
           results = results.filter(m => m.genres.some(g => g.toLowerCase().includes(genre.toLowerCase())));
@@ -124,11 +123,27 @@ window.CineStream = window.CineStream || {};
       }
     },
 
-    async getMovieById(id) {
-      // First attempt movie lookup
+    async getMovieById(id, mediaType = null) {
+      // If type is explicitly 'tv', query TV endpoint directly
+      if (mediaType === 'tv') {
+        try {
+          const tvData = await tmdbFetch(`/tv/${id}`, { append_to_response: 'credits' });
+          const tvShow = formatMedia(tvData, 'tv');
+          if (tvData.credits) {
+            const creator = (tvData.created_by || [])[0];
+            if (creator) tvShow.director = creator.name;
+            tvShow.cast = (tvData.credits.cast || []).slice(0, 6).map(c => c.name);
+          }
+          return tvShow;
+        } catch (e) {
+          console.warn('TMDB TV fetch failed:', e);
+        }
+      }
+
+      // Default or 'movie' query
       try {
         const data = await tmdbFetch(`/movie/${id}`, { append_to_response: 'credits' });
-        const movie = formatMedia(data);
+        const movie = formatMedia(data, 'movie');
         if (data.credits) {
           const director = (data.credits.crew || []).find(c => c.job === 'Director');
           if (director) movie.director = director.name;
@@ -136,10 +151,10 @@ window.CineStream = window.CineStream || {};
         }
         return movie;
       } catch (e) {
-        // If movie fails, attempt TV show lookup
+        // Fallback to TV if movie 404s
         try {
           const tvData = await tmdbFetch(`/tv/${id}`, { append_to_response: 'credits' });
-          const tvShow = formatMedia({ ...tvData, media_type: 'tv' });
+          const tvShow = formatMedia(tvData, 'tv');
           if (tvData.credits) {
             const creator = (tvData.created_by || [])[0];
             if (creator) tvShow.director = creator.name;
@@ -147,7 +162,7 @@ window.CineStream = window.CineStream || {};
           }
           return tvShow;
         } catch (err) {
-          console.warn('TMDB getMovieById failed for both movie and TV:', err);
+          console.warn('TMDB lookup failed for both movie and TV:', err);
           return FALLBACK_CATALOG[0];
         }
       }

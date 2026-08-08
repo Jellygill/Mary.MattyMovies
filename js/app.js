@@ -201,8 +201,9 @@ function renderWatchlist(storage) {
  * Generate Movie Card HTML string
  */
 function createMovieCardHTML(m) {
+  const type = m.mediaType || 'movie';
   return `
-    <div class="movie-card" onclick="window.location.href='./movie.html?id=${encodeURIComponent(m.id)}'">
+    <div class="movie-card" onclick="window.location.href='./movie.html?id=${encodeURIComponent(m.id)}&type=${type}'">
       <div class="card-poster-wrapper">
         <img class="card-poster" src="${m.poster}" alt="${m.title}" loading="lazy">
         <div class="card-badge-rating"><i class="fa-solid fa-star"></i> ${m.rating}</div>
