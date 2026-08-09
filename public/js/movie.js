@@ -96,8 +96,10 @@ async function loadSimilarMovies(provider, currentMovie) {
     const popular = await provider.getPopular();
     const filtered = popular.filter(m => String(m.id) !== String(currentMovie.id));
 
-    container.innerHTML = filtered.map(m => `
-      <div class="movie-card" onclick="window.location.href='./movie.html?id=${encodeURIComponent(m.id)}'">
+    container.innerHTML = filtered.map(m => {
+      const type = m.mediaType || 'movie';
+      return `
+      <div class="movie-card" onclick="window.location.href='./movie.html?id=${encodeURIComponent(m.id)}&type=${type}'">
         <div class="card-poster-wrapper">
           <img class="card-poster" src="${m.poster}" alt="${m.title}" loading="lazy">
           <div class="card-badge-rating"><i class="fa-solid fa-star"></i> ${m.rating}</div>
@@ -113,7 +115,8 @@ async function loadSimilarMovies(provider, currentMovie) {
           </div>
         </div>
       </div>
-    `).join('');
+    `;
+    }).join('');
   } catch (err) {
     console.error('Failed to load similar movies', err);
   }
