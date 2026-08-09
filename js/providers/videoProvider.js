@@ -1,6 +1,6 @@
 /**
  * videoProvider.js - Client-Side Multi-Server Embed Provider
- * Optimized server order prioritizing fast loading speeds (vidsrc.pm, vidsrc.in, videasy).
+ * Default server prioritizes clean playback and built-in subtitles (Videasy, VidPhantom, VidFast).
  */
 
 window.CineStream = window.CineStream || {};
@@ -35,35 +35,35 @@ window.CineStream = window.CineStream || {};
     }
   };
 
-  // High-Speed Stream Servers (Prioritizing fast loading & subtitles)
+  // Clean embed servers — default first; subtitles are handled inside each player UI.
   const EMBED_SERVERS = [
     {
-      id: 'vidsrcpm',
-      name: 'Server 1 (VidSrc Fast — Ultra Speed)',
-      getMovieUrl: (id) => `https://vidsrc.pm/embed/movie?tmdb=${id}`,
-      getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.pm/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
-    },
-    {
-      id: 'vidsrcin',
-      name: 'Server 2 (VidSrc Direct)',
-      getMovieUrl: (id) => `https://vidsrc.in/embed/movie?tmdb=${id}`,
-      getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.in/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
-    },
-    {
       id: 'videasy',
-      name: 'Server 3 (Videasy — Multi-Language Captions)',
+      name: 'Server 1 (Videasy — Clean + Subtitles)',
       getMovieUrl: (id) => `https://player.videasy.net/movie/${id}`,
       getTvUrl: (id, s = 1, e = 1) => `https://player.videasy.net/tv/${id}/${s}/${e}`
     },
     {
-      id: 'multiembed',
-      name: 'Server 4 (MultiEmbed Mirror)',
-      getMovieUrl: (id) => `https://multiembed.mov/?video_id=${id}&tmdb=1`,
-      getTvUrl: (id, s = 1, e = 1) => `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`
+      id: 'vidphantom',
+      name: 'Server 2 (VidPhantom — Ad-Free)',
+      getMovieUrl: (id) => `https://vidphantom.com/movie/${id}?autoplay=false&subShadow=true`,
+      getTvUrl: (id, s = 1, e = 1) => `https://vidphantom.com/tv/${id}/${s}/${e}?autoplay=false&subShadow=true`
+    },
+    {
+      id: 'vidfast',
+      name: 'Server 3 (VidFast — English Subs)',
+      getMovieUrl: (id) => `https://vidfast.vc/movie/${id}?autoPlay=false&sub=en&hideServer=true&theme=141414`,
+      getTvUrl: (id, s = 1, e = 1) => `https://vidfast.vc/tv/${id}/${s}/${e}?autoPlay=false&sub=en&hideServer=true&theme=141414`
+    },
+    {
+      id: 'vidsrcfyi',
+      name: 'Server 4 (VidSrc Pro — Multi-Sub)',
+      getMovieUrl: (id) => `https://vidsrc.fyi/embed/movie/${id}`,
+      getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.fyi/embed/tv/${id}/${s}/${e}`
     },
     {
       id: 'vidlink',
-      name: 'Server 5 (VidLink 1080p)',
+      name: 'Server 5 (VidLink — Backup 1080p)',
       getMovieUrl: (id) => `https://vidlink.pro/movie/${id}`,
       getTvUrl: (id, s = 1, e = 1) => `https://vidlink.pro/tv/${id}/${s}/${e}`
     }
