@@ -66,6 +66,12 @@ window.CineStream = window.CineStream || {};
       name: 'Server 5 (VidLink — Backup 1080p)',
       getMovieUrl: (id) => `https://vidlink.pro/movie/${id}`,
       getTvUrl: (id, s = 1, e = 1) => `https://vidlink.pro/tv/${id}/${s}/${e}`
+    },
+    {
+      id: 'goated',
+      name: 'Server 6 (Goated — HD + Subtitles)',
+      getMovieUrl: (id) => `https://goated.cx/movie/${id}`,
+      getTvUrl: (id, s = 1, e = 1) => `https://goated.cx/tv/${id}/${s}/${e}`
     }
   ];
 
