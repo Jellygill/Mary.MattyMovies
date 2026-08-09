@@ -66,6 +66,12 @@ window.CineStream = window.CineStream || {};
       name: 'Server 5 (VidLink — Backup 1080p)',
       getMovieUrl: (id) => `https://vidlink.pro/movie/${id}`,
       getTvUrl: (id, s = 1, e = 1) => `https://vidlink.pro/tv/${id}/${s}/${e}`
+    },
+    {
+      id: 'vidsrciu',
+      name: 'Server 6 (VidSrc ICU — Alternative)',
+      getMovieUrl: (id) => `https://vidsrc.icu/embed/movie/${id}`,
+      getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.icu/embed/tv/${id}/${s}/${e}`
     }
   ];
 
