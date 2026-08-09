@@ -47,6 +47,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       video.style.display = 'none';
       playerControls.style.display = 'none';
 
+      // Populate subtitle dropdown with server info message
+      subtitleSelect.innerHTML = '<option value="off">Subtitles managed by video player</option>';
+
       setupServerSelector(iframe, playback.servers);
     } else {
       // Direct HTML5 Video Player Mode
