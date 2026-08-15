@@ -1,7 +1,7 @@
 /**
  * videoProvider.js - Client-Side Multi-Server Embed Provider
- * Server 1 is Videasy (as preferred by user) followed by fast, reliable, verified mirrors
- * with full support for TV series (True Beauty, etc.) using TMDB & IMDb matching.
+ * Server 1 is Videasy, backed by 4 verified high-uptime streaming mirrors
+ * supporting Movies, TV Shows, Anime, and Asian K-Dramas (True Beauty, etc.).
  */
 
 window.CineStream = window.CineStream || {};
@@ -45,26 +45,26 @@ window.CineStream = window.CineStream || {};
       getTvUrl: (id, s = 1, e = 1) => `https://player.videasy.net/tv/${id}/${s}/${e}`
     },
     {
-      id: 'autoembed',
-      name: 'Server 2 (AutoEmbed VIP — Ultra Fast)',
-      getMovieUrl: (id, imdb) => imdb ? `https://autoembed.co/movie/imdb/${imdb}` : `https://autoembed.co/movie/tmdb/${id}`,
-      getTvUrl: (id, s = 1, e = 1, imdb) => imdb ? `https://autoembed.co/tv/imdb/${imdb}-${s}-${e}` : `https://autoembed.co/tv/tmdb/${id}-${s}-${e}`
-    },
-    {
-      id: 'vidsrc',
-      name: 'Server 3 (VidSrc Pro — Fast Mirror)',
-      getMovieUrl: (id, imdb) => imdb ? `https://vidsrc.me/embed/movie?imdb=${imdb}` : `https://vidsrc.pm/embed/movie?tmdb=${id}`,
-      getTvUrl: (id, s = 1, e = 1, imdb) => imdb ? `https://vidsrc.me/embed/tv?imdb=${imdb}&season=${s}&episode=${e}` : `https://vidsrc.pm/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
+      id: 'vidsrcme',
+      name: 'Server 2 (VidSrc — Multi-Source)',
+      getMovieUrl: (id, imdb) => `https://vidsrc.me/embed/movie?tmdb=${id}`,
+      getTvUrl: (id, s = 1, e = 1, imdb) => imdb ? `https://vidsrc.me/embed/tv?imdb=${imdb}&season=${s}&episode=${e}` : `https://vidsrc.me/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
     },
     {
       id: 'twoembed',
-      name: 'Server 4 (2Embed — 1080p Stream)',
+      name: 'Server 3 (2Embed — 1080p Stream)',
       getMovieUrl: (id) => `https://www.2embed.cc/embed/${id}`,
       getTvUrl: (id, s = 1, e = 1) => `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`
     },
     {
+      id: 'nontongo',
+      name: 'Server 4 (NontonGo — Drama & Movie Mirror)',
+      getMovieUrl: (id) => `https://www.nontongo.win/embed/movie/${id}`,
+      getTvUrl: (id, s = 1, e = 1) => `https://www.nontongo.win/embed/tv/${id}/${s}/${e}`
+    },
+    {
       id: 'smashystream',
-      name: 'Server 5 (SmashyStream — Multi-Source)',
+      name: 'Server 5 (SmashyStream — Fast Mirror)',
       getMovieUrl: (id) => `https://embed.smashystream.com/playere.php?tmdb=${id}`,
       getTvUrl: (id, s = 1, e = 1) => `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`
     }
