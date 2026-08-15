@@ -1,6 +1,7 @@
 /**
  * videoProvider.js - Client-Side Multi-Server Embed Provider
- * Server 1 is Videasy (as preferred by user) followed by fast, reliable, verified mirrors.
+ * Server 1 is Videasy (as preferred by user) followed by fast, reliable, verified mirrors
+ * with full support for TV series (True Beauty, etc.) using TMDB & IMDb matching.
  */
 
 window.CineStream = window.CineStream || {};
@@ -46,14 +47,14 @@ window.CineStream = window.CineStream || {};
     {
       id: 'autoembed',
       name: 'Server 2 (AutoEmbed VIP — Ultra Fast)',
-      getMovieUrl: (id) => `https://autoembed.co/movie/tmdb/${id}`,
-      getTvUrl: (id, s = 1, e = 1) => `https://autoembed.co/tv/tmdb/${id}-${s}-${e}`
+      getMovieUrl: (id, imdb) => imdb ? `https://autoembed.co/movie/imdb/${imdb}` : `https://autoembed.co/movie/tmdb/${id}`,
+      getTvUrl: (id, s = 1, e = 1, imdb) => imdb ? `https://autoembed.co/tv/imdb/${imdb}-${s}-${e}` : `https://autoembed.co/tv/tmdb/${id}-${s}-${e}`
     },
     {
-      id: 'vidsrcpm',
+      id: 'vidsrc',
       name: 'Server 3 (VidSrc Pro — Fast Mirror)',
-      getMovieUrl: (id) => `https://vidsrc.pm/embed/movie?tmdb=${id}`,
-      getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.pm/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
+      getMovieUrl: (id, imdb) => imdb ? `https://vidsrc.me/embed/movie?imdb=${imdb}` : `https://vidsrc.pm/embed/movie?tmdb=${id}`,
+      getTvUrl: (id, s = 1, e = 1, imdb) => imdb ? `https://vidsrc.me/embed/tv?imdb=${imdb}&season=${s}&episode=${e}` : `https://vidsrc.pm/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
     },
     {
       id: 'twoembed',
@@ -72,19 +73,19 @@ window.CineStream = window.CineStream || {};
   window.CineStream.VideoClientProvider = {
     EMBED_SERVERS,
 
-    async getPlaybackSource(movieId, mediaType = 'movie') {
+    async getPlaybackSource(movieId, mediaType = 'movie', imdbId = null) {
       if (DIRECT_SOURCES[movieId]) {
         return DIRECT_SOURCES[movieId];
       }
 
       const isTV = mediaType === 'tv';
       const defaultServer = EMBED_SERVERS[0];
-      const initialUrl = isTV ? defaultServer.getTvUrl(movieId) : defaultServer.getMovieUrl(movieId);
+      const initialUrl = isTV ? defaultServer.getTvUrl(movieId, 1, 1, imdbId) : defaultServer.getMovieUrl(movieId, imdbId);
 
       const servers = EMBED_SERVERS.map(srv => ({
         id: srv.id,
         name: srv.name,
-        url: isTV ? srv.getTvUrl(movieId) : srv.getMovieUrl(movieId)
+        url: isTV ? srv.getTvUrl(movieId, 1, 1, imdbId) : srv.getMovieUrl(movieId, imdbId)
       }));
 
       return {

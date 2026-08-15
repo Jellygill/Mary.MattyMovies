@@ -1,6 +1,6 @@
 /**
  * tmdbProvider.js - Client-Side TMDB API Provider
- * Intelligent resolution for Movies vs TV Shows, preventing ID collisions.
+ * Intelligent resolution for Movies vs TV Shows, including external IMDb IDs.
  */
 
 window.CineStream = window.CineStream || {};
@@ -22,7 +22,7 @@ window.CineStream = window.CineStream || {};
       description: 'In a dystopian future in Amsterdam, a group of warriors and scientists gather to stage a crucial desperate intervention to save humanity.',
       poster: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=800&auto=format&fit=crop',
       backdrop: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=1920&auto=format&fit=crop',
-      isFeatured: true, isTrending: true, isPopular: true, mediaType: 'movie'
+      isFeatured: true, isTrending: true, isPopular: true, mediaType: 'movie', imdbId: null
     }
   ];
 
@@ -45,15 +45,18 @@ window.CineStream = window.CineStream || {};
     const posterPath   = m.poster_path   ? `${TMDB_IMG_BASE}/w500${m.poster_path}`   : 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=800';
     const backdropPath = m.backdrop_path ? `${TMDB_IMG_BASE}/w1280${m.backdrop_path}` : 'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=1920';
     const genres = (m.genres || m.genre_ids || []).map(g => typeof g === 'object' ? g.name : g).filter(Boolean);
+    const imdbId = m.imdb_id || (m.external_ids ? m.external_ids.imdb_id : null) || null;
 
     return {
       id:          String(m.id),
       mediaType:   isTV ? 'tv' : 'movie',
+      imdbId,
       title,
       year,
       rating:      m.vote_average ? parseFloat(m.vote_average.toFixed(1)) : 0,
       voteCount:   m.vote_count || 0,
       runtime:     m.runtime ? `${m.runtime} min` : (m.episode_run_time && m.episode_run_time[0] ? `${m.episode_run_time[0]} min` : null),
+      genres,
       director:    m.director || null,
       cast:        m.cast || [],
       tagline:     m.tagline || '',
@@ -126,7 +129,7 @@ window.CineStream = window.CineStream || {};
       // 1. If mediaType is explicitly 'tv', fetch TV directly
       if (mediaType === 'tv') {
         try {
-          const tvData = await tmdbFetch(`/tv/${id}`, { append_to_response: 'credits' });
+          const tvData = await tmdbFetch(`/tv/${id}`, { append_to_response: 'credits,external_ids' });
           const tvShow = formatMedia(tvData, 'tv');
           if (tvData.credits) {
             const creator = (tvData.created_by || [])[0];
@@ -142,7 +145,7 @@ window.CineStream = window.CineStream || {};
       // 2. If mediaType is explicitly 'movie', fetch Movie directly
       if (mediaType === 'movie') {
         try {
-          const movieData = await tmdbFetch(`/movie/${id}`, { append_to_response: 'credits' });
+          const movieData = await tmdbFetch(`/movie/${id}`, { append_to_response: 'credits,external_ids' });
           const movie = formatMedia(movieData, 'movie');
           if (movieData.credits) {
             const director = (movieData.credits.crew || []).find(c => c.job === 'Director');
@@ -158,8 +161,8 @@ window.CineStream = window.CineStream || {};
       // 3. If mediaType is unknown/null, fetch BOTH concurrently and resolve by popularity
       try {
         const [movieRes, tvRes] = await Promise.allSettled([
-          tmdbFetch(`/movie/${id}`, { append_to_response: 'credits' }),
-          tmdbFetch(`/tv/${id}`, { append_to_response: 'credits' })
+          tmdbFetch(`/movie/${id}`, { append_to_response: 'credits,external_ids' }),
+          tmdbFetch(`/tv/${id}`, { append_to_response: 'credits,external_ids' })
         ]);
 
         const movieData = movieRes.status === 'fulfilled' ? movieRes.value : null;
