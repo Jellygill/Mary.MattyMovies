@@ -1,6 +1,6 @@
 /**
  * videoProvider.js - Client-Side Multi-Server Embed Provider
- * Default server prioritizes clean playback and built-in subtitles (Videasy, VidPhantom, VidFast).
+ * Server 1 is Videasy (as preferred by user) followed by fast, reliable, verified mirrors.
  */
 
 window.CineStream = window.CineStream || {};
@@ -35,7 +35,7 @@ window.CineStream = window.CineStream || {};
     }
   };
 
-  // Clean embed servers — default first; subtitles are handled inside each player UI.
+  // High-Speed Verified Stream Servers
   const EMBED_SERVERS = [
     {
       id: 'videasy',
@@ -44,28 +44,28 @@ window.CineStream = window.CineStream || {};
       getTvUrl: (id, s = 1, e = 1) => `https://player.videasy.net/tv/${id}/${s}/${e}`
     },
     {
-      id: 'vidphantom',
-      name: 'Server 2 (VidPhantom — Ad-Free)',
-      getMovieUrl: (id) => `https://vidphantom.com/movie/${id}?autoplay=false&subShadow=true`,
-      getTvUrl: (id, s = 1, e = 1) => `https://vidphantom.com/tv/${id}/${s}/${e}?autoplay=false&subShadow=true`
+      id: 'autoembed',
+      name: 'Server 2 (AutoEmbed VIP — Ultra Fast)',
+      getMovieUrl: (id) => `https://autoembed.co/movie/tmdb/${id}`,
+      getTvUrl: (id, s = 1, e = 1) => `https://autoembed.co/tv/tmdb/${id}-${s}-${e}`
     },
     {
-      id: 'vidfast',
-      name: 'Server 3 (VidFast — English Subs)',
-      getMovieUrl: (id) => `https://vidfast.vc/movie/${id}?autoPlay=false&sub=en&hideServer=true&theme=141414`,
-      getTvUrl: (id, s = 1, e = 1) => `https://vidfast.vc/tv/${id}/${s}/${e}?autoPlay=false&sub=en&hideServer=true&theme=141414`
+      id: 'vidsrcpm',
+      name: 'Server 3 (VidSrc Pro — Fast Mirror)',
+      getMovieUrl: (id) => `https://vidsrc.pm/embed/movie?tmdb=${id}`,
+      getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.pm/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
     },
     {
-      id: 'vidsrcfyi',
-      name: 'Server 4 (VidSrc Pro — Multi-Sub)',
-      getMovieUrl: (id) => `https://vidsrc.fyi/embed/movie/${id}`,
-      getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.fyi/embed/tv/${id}/${s}/${e}`
+      id: 'twoembed',
+      name: 'Server 4 (2Embed — 1080p Stream)',
+      getMovieUrl: (id) => `https://www.2embed.cc/embed/${id}`,
+      getTvUrl: (id, s = 1, e = 1) => `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`
     },
     {
-      id: 'vidlink',
-      name: 'Server 5 (VidLink — Backup 1080p)',
-      getMovieUrl: (id) => `https://vidlink.pro/movie/${id}`,
-      getTvUrl: (id, s = 1, e = 1) => `https://vidlink.pro/tv/${id}/${s}/${e}`
+      id: 'smashystream',
+      name: 'Server 5 (SmashyStream — Multi-Source)',
+      getMovieUrl: (id) => `https://embed.smashystream.com/playere.php?tmdb=${id}`,
+      getTvUrl: (id, s = 1, e = 1) => `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`
     }
   ];
 
