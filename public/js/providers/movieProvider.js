@@ -93,6 +93,7 @@ window.CineStream = window.CineStream || {};
       return {
         id: movie.id,
         mediaType: movie.mediaType || type,
+        imdbId: movie.imdbId || null,
         title: movie.title,
         year: movie.year,
         backdrop: movie.backdrop,
@@ -105,7 +106,7 @@ window.CineStream = window.CineStream || {};
     },
 
     async _attachClientPlayback(movie) {
-      const playback = await window.CineStream.VideoClientProvider.getPlaybackSource(movie.id);
+      const playback = await window.CineStream.VideoClientProvider.getPlaybackSource(movie.id, movie.mediaType, movie.imdbId);
       return {
         ...movie,
         playback: {

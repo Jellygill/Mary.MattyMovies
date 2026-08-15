@@ -1508,4 +1508,58 @@ img {
   box-shadow: 0 0 12px rgba(255, 105, 180, 0.6);
 }
 
+/* --- TV Episode Selector Bar --- */
+.tv-episode-selector-bar {
+  position: absolute;
+  top: 130px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(20, 8, 16, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 6px 14px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 105, 180, 0.25);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
+  max-width: 92vw;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.episode-btn-list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.episode-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: #d1c0cc;
+  border: 1px solid rgba(255, 182, 217, 0.2);
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.episode-btn:hover {
+  background: rgba(255, 105, 180, 0.25);
+  color: #fff;
+  border-color: var(--accent-pink);
+}
+
+.episode-btn.active {
+  background: var(--accent-gradient);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.6);
+}
+
+
 

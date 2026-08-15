@@ -1,7 +1,7 @@
 /**
  * player.js - Video Player Controller
  * Handles direct HTML5 video playback with custom UI controls,
- * iframe embed fallback, progress saving/resume, and hotkeys.
+ * iframe embed fallback with server switcher and TV episode selector.
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -31,6 +31,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const pipBtn = document.getElementById('pipBtn');
   const fullscreenBtn = document.getElementById('fullscreenBtn');
 
+  let currentSeason = 1;
+  let currentEpisode = 1;
+  let currentServerIndex = 0;
+
   try {
     const watchData = await provider.getWatchDetails(movieId, mediaType);
     if (!watchData) return;
@@ -47,10 +51,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       video.style.display = 'none';
       playerControls.style.display = 'none';
 
-      // Populate subtitle dropdown with server info message
-      subtitleSelect.innerHTML = '<option value="off">Subtitles managed by video player</option>';
-
-      setupServerSelector(iframe, playback.servers);
+      setupServerSelector(iframe, playback.servers, watchData);
+      setupEpisodeSelector(iframe, watchData);
     } else {
       // Direct HTML5 Video Player Mode
       video.style.display = 'block';
@@ -63,14 +65,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error('Failed to initialize video player', err);
   }
 
-  function setupServerSelector(iframe, servers) {
+  function setupServerSelector(iframe, servers, watchData) {
     const serverBar = document.getElementById('serverSelectorBar');
     const serverList = document.getElementById('serverBtnList');
     if (!serverBar || !serverList || !servers || servers.length === 0) return;
 
     serverBar.style.display = 'flex';
     serverList.innerHTML = servers.map((srv, idx) => `
-      <button class="server-btn ${idx === 0 ? 'active' : ''}" data-url="${srv.url}">
+      <button class="server-btn ${idx === 0 ? 'active' : ''}" data-index="${idx}">
         <i class="fa-solid fa-play"></i> ${srv.name}
       </button>
     `).join('');
@@ -80,9 +82,44 @@ document.addEventListener('DOMContentLoaded', async () => {
       btn.onclick = () => {
         buttons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        iframe.src = btn.getAttribute('data-url');
+        currentServerIndex = parseInt(btn.getAttribute('data-index'), 10);
+        updateStreamUrl(iframe, watchData);
       };
     });
+  }
+
+  function setupEpisodeSelector(iframe, watchData) {
+    const epBar = document.getElementById('tvEpisodeSelectorBar');
+    const epList = document.getElementById('episodeBtnList');
+    if (!epBar || !epList || watchData.mediaType !== 'tv') return;
+
+    epBar.style.display = 'flex';
+    const totalEps = 16;
+    epList.innerHTML = Array.from({ length: totalEps }, (_, i) => i + 1).map(epNum => `
+      <button class="episode-btn ${epNum === 1 ? 'active' : ''}" data-ep="${epNum}">
+        Ep ${epNum}
+      </button>
+    `).join('');
+
+    const epButtons = epList.querySelectorAll('.episode-btn');
+    epButtons.forEach(btn => {
+      btn.onclick = () => {
+        epButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentEpisode = parseInt(btn.getAttribute('data-ep'), 10);
+        updateStreamUrl(iframe, watchData);
+      };
+    });
+  }
+
+  function updateStreamUrl(iframe, watchData) {
+    const servers = window.CineStream.VideoClientProvider.EMBED_SERVERS;
+    const srv = servers[currentServerIndex] || servers[0];
+    const isTV = watchData.mediaType === 'tv';
+    const newUrl = isTV
+      ? srv.getTvUrl(watchData.id, currentSeason, currentEpisode, watchData.imdbId)
+      : srv.getMovieUrl(watchData.id, watchData.imdbId);
+    iframe.src = newUrl;
   }
 
   function setupDirectVideoPlayer(video, playback, watchData, storage) {

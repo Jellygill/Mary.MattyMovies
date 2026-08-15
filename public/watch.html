@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
   <title>Watching - Mary.MattyMovies Player</title>
   <meta name="description" content="Cinematic video player page on Mary.MattyMovies.">
   <meta name="theme-color" content="#000000">
@@ -31,13 +32,19 @@
       <div class="server-btn-list" id="serverBtnList"></div>
     </div>
 
+    <!-- TV Episode Selector Bar -->
+    <div class="tv-episode-selector-bar" id="tvEpisodeSelectorBar" style="display: none;">
+      <span class="server-bar-label"><i class="fa-solid fa-list-ol"></i> Episode:</span>
+      <div class="episode-btn-list" id="episodeBtnList"></div>
+    </div>
+
     <!-- Direct HTML5 Video Player Container -->
     <video class="player-video-element" id="mainVideoPlayer" preload="metadata" crossorigin="anonymous" style="display: none;">
       <!-- Track tags inserted dynamically -->
     </video>
 
     <!-- Authorized Embed Iframe Player Container -->
-    <iframe class="player-iframe-element" id="mainIframePlayer" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen style="display: none;"></iframe>
+    <iframe class="player-iframe-element" id="mainIframePlayer" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="no-referrer" style="display: none;"></iframe>
 
     <!-- Custom Control Overlay Bar for HTML5 Video -->
     <div class="player-bottom-controls" id="playerControls" style="display: none;">
