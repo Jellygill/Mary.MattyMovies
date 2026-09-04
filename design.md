@@ -18,7 +18,7 @@ Atmospheric, with an intimate rose-cinema tone.
 
 - Canvas: near-black berry, never pure black.
 - Surfaces: plum-black and mulberry for clear depth.
-- Accent: restrained rose, used for actions, focus, and small metadata marks.
+- Accent: radiant rose, concentrated around the featured film, primary actions, focus, and selected states.
 - My Melody: a small signature asset, never a replacement for hierarchy.
 
 ## Typography
@@ -35,7 +35,7 @@ and varied vertical rhythms instead of identical section padding.
 ## Motion
 
 - Easing: named ease-out / ease-in-out tokens.
-- Motion: opacity and small transform feedback only.
+- Motion: a gentle My Melody float plus small transform feedback; light is static and never decorative animation.
 - Reduced motion: near-instant transitions with no repeating animation.
 
 ## Interaction
@@ -47,7 +47,7 @@ and varied vertical rhythms instead of identical section padding.
 ## What Pages Share
 
 - Mary.MattyMovies wordmark, rose placement, typography, card treatment, and button voice.
-- A restrained dark canvas and elevated plum surfaces.
+- A dark berry canvas, elevated plum surfaces, and cinematic rose light around primary moments.
 - The same search and watchlist affordances.
 
 ## Per-page Allowances

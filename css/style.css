@@ -1474,6 +1474,140 @@ body { background-image: linear-gradient(135deg, var(--color-canvas-deep), var(-
 @media (max-width: 768px) { .site-header { height: 64px; } .nav-links { display: none; } .hero-banner { height: 78dvh; min-height: 640px; padding-bottom: var(--space-2xl); } .details-page-wrapper { padding-top: 64px; } .details-content-grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); text-align: left; } .details-poster { max-width: 210px; margin: 0; } .details-meta-row { justify-content: flex-start; } }
 @media (max-width: 480px) { .site-header { padding-inline: var(--space-sm); } .nav-brand { font-size: var(--text-sm); } .brand-icon-img { width: 34px; height: 34px; } .hero-banner { min-height: 620px; padding-inline: var(--space-sm); } .melody-hero-sticker { width: 100px; right: var(--space-sm); opacity: .62; } .hero-title { font-size: clamp(3.25rem, 17vw, 4.6rem); } .hero-description { font-size: var(--text-sm); } .main-container { padding-top: var(--space-xl); gap: var(--space-2xl); } .movie-card { flex-basis: 152px; width: 152px; } .movie-card.progress-card { flex-basis: 250px; width: 250px; } .carousel-btn { display: none; } .details-hero { padding: var(--space-2xl) var(--space-sm); } .details-title { font-size: clamp(3rem, 15vw, 4.5rem); } .player-title-display, .player-top-bar .nav-subtitle-tag { display: none; } }
 @media (prefers-reduced-motion: reduce) { .heart-pulse, .melody-hero-sticker, .empty-watchlist-img, .skeleton { animation: none; } }
++/* --- Radiant Rose revision --- */
+.site-header {
+  box-shadow: 0 10px 34px var(--color-overlay);
+}
+
+.site-header.scrolled {
+  box-shadow: 0 12px 38px var(--color-overlay), 0 1px 0 var(--color-accent-aura);
+}
+
+.brand-icon-img {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-wash), var(--shadow-rose);
+}
+
+.brand-title span {
+  text-shadow: 0 0 16px var(--color-accent-radiance);
+}
+
+.nav-link.active::after {
+  box-shadow: 0 0 14px var(--color-accent-radiance);
+}
+
+.search-trigger-btn:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-wash), var(--shadow-rose);
+}
+
+.hero-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 80% 72%, var(--color-accent-aura) 0%, transparent 26%),
+    radial-gradient(circle at 57% 94%, var(--color-accent-wash-strong) 0%, transparent 31%);
+  mix-blend-mode: screen;
+}
+
+.hero-content,
+.melody-hero-sticker {
+  z-index: 2;
+}
+
+.hero-couple-tag {
+  background: var(--color-accent-wash-strong);
+  box-shadow: 0 0 20px var(--color-accent-aura);
+}
+
+.hero-badge {
+  border-color: var(--color-accent-radiance);
+}
+
+.hero-title {
+  text-shadow: 0 6px 36px var(--color-overlay), 0 0 36px var(--color-accent-aura);
+}
+
+.melody-hero-sticker {
+  filter: drop-shadow(0 0 16px var(--color-accent-radiance)) drop-shadow(0 16px 24px var(--color-overlay));
+}
+
+.btn-primary {
+  border-color: var(--color-accent-soft);
+  box-shadow: 0 0 0 3px var(--color-accent-wash), var(--shadow-rose);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 0 4px var(--color-accent-wash-strong), var(--shadow-rose-wide);
+}
+
+.btn-secondary:hover {
+  box-shadow: 0 0 18px var(--color-accent-aura);
+}
+
+.section-indicator {
+  box-shadow: 0 0 14px var(--color-accent-radiance);
+}
+
+.movie-card:hover .card-poster-wrapper {
+  box-shadow: 0 0 0 2px var(--color-accent-wash), 0 14px 30px var(--color-overlay), 0 0 26px var(--color-accent-aura);
+}
+
+.card-play-icon {
+  box-shadow: 0 0 0 4px var(--color-accent-wash), var(--shadow-rose);
+}
+
+.card-badge-rating {
+  border: var(--rule-hair) solid var(--color-accent-radiance);
+  box-shadow: 0 0 16px var(--color-accent-aura);
+}
+
+.details-poster {
+  box-shadow: 0 20px 46px var(--color-overlay), var(--shadow-rose-wide);
+}
+
+.details-cast-row {
+  box-shadow: -8px 0 22px var(--color-accent-wash);
+}
+
+.trailer-frame {
+  box-shadow: 0 18px 48px var(--color-overlay), 0 0 28px var(--color-accent-aura);
+}
+
+.search-input-field {
+  box-shadow: 0 18px 48px var(--color-overlay), 0 0 30px var(--color-accent-aura);
+}
+
+.search-result-item:hover .search-result-title {
+  color: var(--color-accent-soft);
+  text-shadow: 0 0 14px var(--color-accent-aura);
+}
+
+.couple-toast {
+  box-shadow: var(--shadow-tight), var(--shadow-rose);
+}
+
+.server-btn.active,
+.episode-btn.active {
+  box-shadow: 0 0 20px var(--color-accent-radiance);
+}
+
+@media (max-width: 480px) {
+  .hero-banner::after {
+    background: radial-gradient(circle at 72% 70%, var(--color-accent-aura) 0%, transparent 31%);
+  }
+
+  .hero-title {
+    text-shadow: 0 4px 22px var(--color-overlay), 0 0 24px var(--color-accent-aura);
+  }
+
+  .movie-card:hover .card-poster-wrapper {
+    box-shadow: 0 10px 22px var(--color-overlay), 0 0 18px var(--color-accent-aura);
+  }
+}
 
 
 

@@ -18,6 +18,10 @@
   --color-overlay-soft: oklch(14% 0.028 348 / 0.72);
   --color-accent-wash: oklch(72% 0.16 355 / 0.14);
   --color-accent-wash-strong: oklch(72% 0.16 355 / 0.24);
+  --color-accent-radiance: oklch(72% 0.16 355 / 0.52);
+  --color-accent-aura: oklch(64% 0.2 352 / 0.28);
+  --shadow-rose: 0 0 28px var(--color-accent-radiance);
+  --shadow-rose-wide: 0 0 60px var(--color-accent-aura);
 
   --font-display: "DM Serif Display", Georgia, serif;
   --font-body: "DM Sans", Arial, sans-serif;
