@@ -66,7 +66,7 @@
         <a href="./movie.html?id=tears-of-steel" class="btn btn-secondary" id="heroInfoBtn">
           <i class="fa-solid fa-circle-info"></i> More Info
         </a>
-        <button class="btn btn-secondary btn-icon-only" id="heroWatchlistBtn" title="Add to Our Watchlist">
+        <button class="btn btn-secondary btn-icon-only" id="heroWatchlistBtn" title="Add to Our Watchlist" aria-label="Add to Our Watchlist">
           <i class="fa-solid fa-heart"></i>
         </button>
       </div>
@@ -100,7 +100,7 @@
         </div>
       </div>
       <div class="carousel-wrapper">
-        <button class="carousel-btn prev" id="trendingPrev"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="carousel-btn prev" id="trendingPrev" aria-label="Scroll trending movies left"><i class="fa-solid fa-chevron-left"></i></button>
         <div class="movie-row-grid" id="trendingGrid">
           <!-- Skeleton shimmer placeholders -->
           <div class="movie-card skeleton"></div>
@@ -108,7 +108,7 @@
           <div class="movie-card skeleton"></div>
           <div class="movie-card skeleton"></div>
         </div>
-        <button class="carousel-btn next" id="trendingNext"><i class="fa-solid fa-chevron-right"></i></button>
+        <button class="carousel-btn next" id="trendingNext" aria-label="Scroll trending movies right"><i class="fa-solid fa-chevron-right"></i></button>
       </div>
     </section>
 
@@ -121,7 +121,7 @@
         </div>
       </div>
       <div class="carousel-wrapper">
-        <button class="carousel-btn prev" id="popularPrev"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="carousel-btn prev" id="popularPrev" aria-label="Scroll popular movies left"><i class="fa-solid fa-chevron-left"></i></button>
         <div class="movie-row-grid" id="popularGrid">
           <!-- Skeleton shimmer placeholders -->
           <div class="movie-card skeleton"></div>
@@ -129,7 +129,7 @@
           <div class="movie-card skeleton"></div>
           <div class="movie-card skeleton"></div>
         </div>
-        <button class="carousel-btn next" id="popularNext"><i class="fa-solid fa-chevron-right"></i></button>
+        <button class="carousel-btn next" id="popularNext" aria-label="Scroll popular movies right"><i class="fa-solid fa-chevron-right"></i></button>
       </div>
     </section>
 
@@ -155,7 +155,7 @@
     <div class="search-input-box">
       <i class="fa-solid fa-magnifying-glass search-icon-left"></i>
       <input type="text" class="search-input-field" id="searchInput" placeholder="Search title, genre, or keyword..." autocomplete="off">
-      <button class="search-close-btn" id="closeSearchBtn"><i class="fa-solid fa-xmark"></i></button>
+      <button class="search-close-btn" id="closeSearchBtn" aria-label="Close search"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="search-results-wrapper" id="searchResultsContainer"></div>
   </div>

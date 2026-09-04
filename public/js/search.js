@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     searchResultsContainer.innerHTML = results.map(item => `
-      <div class="search-result-item" onclick="window.location.href='./movie.html?id=${encodeURIComponent(item.id)}&type=${item.mediaType || 'movie'}'">
+      <a class="search-result-item" href="./movie.html?id=${encodeURIComponent(item.id)}&type=${item.mediaType || 'movie'}" aria-label="View ${escapeHTML(item.title)}">
         <img class="search-result-thumb" src="${item.poster}" alt="${escapeHTML(item.title)}">
         <div class="search-result-info">
           <div class="search-result-title">${escapeHTML(item.title)}</div>
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <span>${item.genres ? item.genres.slice(0, 2).join(', ') : ''}</span>
           </div>
         </div>
-      </div>
+      </a>
     `).join('');
   }
 

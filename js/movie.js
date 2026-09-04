@@ -99,7 +99,7 @@ async function loadSimilarMovies(provider, currentMovie) {
     container.innerHTML = filtered.map(m => {
       const type = m.mediaType || 'movie';
       return `
-      <div class="movie-card" onclick="window.location.href='./movie.html?id=${encodeURIComponent(m.id)}&type=${type}'">
+      <a class="movie-card" href="./movie.html?id=${encodeURIComponent(m.id)}&type=${type}">
         <div class="card-poster-wrapper">
           <img class="card-poster" src="${m.poster}" alt="${m.title}" loading="lazy">
           <div class="card-badge-rating"><i class="fa-solid fa-star"></i> ${m.rating}</div>
@@ -114,7 +114,7 @@ async function loadSimilarMovies(provider, currentMovie) {
             <span>${m.genres ? m.genres[0] : 'Film'}</span>
           </div>
         </div>
-      </div>
+      </a>
     `;
     }).join('');
   } catch (err) {

@@ -55,13 +55,14 @@ html {
   color: var(--text-primary);
   font-family: var(--font-family-body);
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
 }
 
 body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  overflow-x: clip;
   position: relative;
 }
 
@@ -74,14 +75,14 @@ body {
 
 @keyframes cuteFloat {
   0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-8px) rotate(3deg); }
+  50% { transform: translateY(-4px) rotate(1deg); }
   100% { transform: translateY(0px) rotate(0deg); }
 }
 
 .heart-pulse {
   display: inline-block;
   color: var(--accent-pink);
-  animation: heartPulse 1.8s infinite ease-in-out;
+  animation: heartPulse 2.6s infinite ease-in-out;
 }
 
 a {
@@ -95,6 +96,15 @@ button {
   background: none;
   font-family: inherit;
   color: inherit;
+  touch-action: manipulation;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--accent-soft-pink);
+  outline-offset: 3px;
 }
 
 img {
@@ -491,7 +501,8 @@ img {
   opacity: 0;
 }
 
-.carousel-wrapper:hover .carousel-btn {
+.carousel-wrapper:hover .carousel-btn,
+.carousel-btn:focus-visible {
   opacity: 1;
 }
 
@@ -527,8 +538,8 @@ img {
 }
 
 .movie-card:hover {
-  transform: translateY(-8px) scale(1.04);
-  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 105, 180, 0.35);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.8), 0 0 16px rgba(255, 105, 180, 0.28);
   border-color: var(--accent-pink);
 }
 
@@ -747,6 +758,12 @@ img {
 
 .search-close-btn:hover {
   color: var(--accent-pink);
+}
+
+@media (hover: none), (pointer: coarse) {
+  .carousel-btn {
+    opacity: 0.92;
+  }
 }
 
 .search-results-wrapper {
@@ -1223,6 +1240,19 @@ img {
   }
   #heroWatchlistBtn {
     grid-column: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

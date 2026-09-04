@@ -1,7 +1,7 @@
 /**
  * app.js - Home Page Controller
  * Handles hero banner initialization, movie row rendering,
- * watchlist sync, continue watching progress, and movie row rendering.
+ * watchlist sync, and continue watching progress.
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -94,9 +94,11 @@ function updateHeroWatchlistBtnState(storage, heroId = 'tears-of-steel') {
   if (inList) {
     watchlistBtn.innerHTML = '<i class="fa-solid fa-heart" style="color: var(--accent-pink);"></i>';
     watchlistBtn.title = 'In Our Watchlist 💕';
+    watchlistBtn.setAttribute('aria-label', 'Remove from Our Watchlist');
   } else {
     watchlistBtn.innerHTML = '<i class="fa-solid fa-heart-crack"></i>';
     watchlistBtn.title = 'Add to Our Watchlist 💕';
+    watchlistBtn.setAttribute('aria-label', 'Add to Our Watchlist');
   }
 }
 
@@ -146,7 +148,7 @@ function renderContinueWatching(storage) {
 
   section.style.display = 'block';
   container.innerHTML = items.map(item => `
-    <div class="movie-card progress-card" onclick="window.location.href='./watch.html?id=${encodeURIComponent(item.id)}'">
+    <a class="movie-card progress-card" href="./watch.html?id=${encodeURIComponent(item.id)}">
       <div class="card-poster-wrapper">
         <img class="card-poster" src="${item.backdrop || item.poster}" alt="${item.title}" loading="lazy">
         <div class="card-overlay">
@@ -163,7 +165,7 @@ function renderContinueWatching(storage) {
           <span>${item.percent}%</span>
         </div>
       </div>
-    </div>
+    </a>
   `).join('');
 }
 
@@ -198,7 +200,7 @@ function renderWatchlist(storage) {
 function createMovieCardHTML(m) {
   const type = m.mediaType || 'movie';
   return `
-    <div class="movie-card" onclick="window.location.href='./movie.html?id=${encodeURIComponent(m.id)}&type=${type}'">
+    <a class="movie-card" href="./movie.html?id=${encodeURIComponent(m.id)}&type=${type}">
       <div class="card-poster-wrapper">
         <img class="card-poster" src="${m.poster}" alt="${m.title}" loading="lazy">
         <div class="card-badge-rating"><i class="fa-solid fa-star"></i> ${m.rating}</div>
@@ -213,7 +215,7 @@ function createMovieCardHTML(m) {
           <span>${m.genres ? m.genres[0] : 'Film'}</span>
         </div>
       </div>
-    </div>
+    </a>
   `;
 }
 
