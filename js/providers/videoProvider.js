@@ -1,7 +1,7 @@
 /**
  * videoProvider.js - Client-Side Multi-Server Embed Provider
- * Server 1 is Videasy, backed by 4 verified high-uptime streaming mirrors
- * supporting Movies, TV Shows, Anime, and Asian K-Dramas (True Beauty, etc.).
+ * Embedded playback sources. Their subtitle, audio, and quality controls are
+ * provided by each source and are not guaranteed by this application.
  */
 
 window.CineStream = window.CineStream || {};
@@ -40,31 +40,31 @@ window.CineStream = window.CineStream || {};
   const EMBED_SERVERS = [
     {
       id: 'videasy',
-      name: 'Server 1 (Videasy — Clean + Subtitles)',
+      name: 'Server 1 (Videasy)',
       getMovieUrl: (id) => `https://player.videasy.net/movie/${id}`,
       getTvUrl: (id, s = 1, e = 1) => `https://player.videasy.net/tv/${id}/${s}/${e}`
     },
     {
       id: 'vidsrcme',
-      name: 'Server 2 (VidSrc.me — High Compatibility)',
+      name: 'Server 2 (VidSrc.me)',
       getMovieUrl: (id, imdb) => imdb ? `https://vidsrc.me/embed/movie?imdb=${imdb}` : `https://vidsrc.me/embed/movie?tmdb=${id}`,
       getTvUrl: (id, s = 1, e = 1, imdb) => imdb ? `https://vidsrc.me/embed/tv?imdb=${imdb}&season=${s}&episode=${e}` : `https://vidsrc.me/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
     },
     {
       id: 'twoembed',
-      name: 'Server 3 (2Embed — 1080p Stream)',
+      name: 'Server 3 (2Embed)',
       getMovieUrl: (id) => `https://www.2embed.cc/embed/${id}`,
       getTvUrl: (id, s = 1, e = 1) => `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`
     },
     {
       id: 'smashystream',
-      name: 'Server 4 (SmashyStream — Multi-Host)',
+      name: 'Server 4 (SmashyStream)',
       getMovieUrl: (id) => `https://embed.smashystream.com/playere.php?tmdb=${id}`,
       getTvUrl: (id, s = 1, e = 1) => `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`
     },
     {
       id: 'nontongo',
-      name: 'Server 5 (NontonGo — Asian Drama Mirror)',
+      name: 'Server 5 (NontonGo)',
       getMovieUrl: (id) => `https://www.nontongo.win/embed/movie/${id}`,
       getTvUrl: (id, s = 1, e = 1) => `https://www.nontongo.win/embed/tv/${id}/${s}/${e}`
     }
