@@ -25,6 +25,12 @@
   --color-accent-hot-haze: oklch(76% 0.25 351 / 0.38);
   --color-glass-surface: oklch(17% 0.032 348 / 0.76);
   --color-sheen: oklch(100% 0 0 / 0.18);
+  --color-cinematic-tint: oklch(54% 0.075 350 / 0.18);
+  --color-cinematic-tint-soft: oklch(54% 0.075 350 / 0.1);
+  --color-cinematic-veil: oklch(8% 0.018 348 / 0.62);
+  --shadow-hero-depth: 0 28px 70px var(--color-overlay);
+  --shadow-primary-soft: 0 0 13px var(--color-accent-wash-strong), 0 12px 26px var(--color-overlay);
+  --shadow-badge-soft: 0 8px 18px var(--color-overlay);
   --shadow-rose: 0 0 28px var(--color-accent-radiance);
   --shadow-rose-wide: 0 0 60px var(--color-accent-aura);
   --shadow-hot: 0 0 18px var(--color-accent-hot), 0 0 56px var(--color-accent-hot-haze);

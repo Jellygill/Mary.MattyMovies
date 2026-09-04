@@ -1995,5 +1995,81 @@ body.cinema-leaving {
   body { transition: none; }
 }
 
+/* Cinematic refinement: depth before brightness */
+.hero-banner {
+  box-shadow: inset 0 -96px 120px var(--color-canvas), inset 0 0 100px var(--color-cinematic-veil);
+}
+
+.hero-banner::before {
+  inset: -24%;
+  background:
+    radial-gradient(ellipse at 78% 63%, var(--color-cinematic-tint) 0%, transparent 24%),
+    radial-gradient(ellipse at 30% 90%, var(--color-cinematic-tint-soft) 0%, transparent 30%);
+  filter: blur(48px);
+  opacity: 0.34;
+}
+
+.hero-backdrop-overlay {
+  background:
+    linear-gradient(90deg, var(--color-canvas) 0%, var(--color-overlay) 40%, transparent 76%),
+    linear-gradient(180deg, transparent 0%, var(--color-cinematic-veil) 58%, var(--color-canvas) 100%),
+    radial-gradient(ellipse at 78% 70%, var(--color-cinematic-tint-soft) 0%, transparent 38%);
+}
+
+.hero-banner::after {
+  background:
+    radial-gradient(ellipse at 82% 68%, var(--color-cinematic-tint-soft) 0%, transparent 20%),
+    linear-gradient(90deg, var(--color-cinematic-veil) 0%, transparent 64%);
+  opacity: 0.34;
+}
+
+.hero-content {
+  filter: drop-shadow(var(--shadow-hero-depth));
+}
+
+.hero-title {
+  text-shadow: 0 8px 28px var(--color-overlay), 0 0 14px var(--color-accent-wash-strong);
+}
+
+.hero-couple-tag,
+.hero-badge {
+  background: var(--color-glass-surface);
+  border-color: var(--color-rule-strong);
+  box-shadow: var(--shadow-badge-soft);
+}
+
+.hero-couple-tag {
+  color: var(--color-accent-soft);
+}
+
+.melody-hero-sticker {
+  filter: drop-shadow(0 0 9px var(--color-cinematic-tint)) drop-shadow(0 16px 24px var(--color-overlay));
+}
+
+.btn-primary {
+  box-shadow: var(--shadow-primary-soft);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 18px var(--color-accent-radiance), 0 16px 30px var(--color-overlay);
+}
+
+.btn-secondary,
+.btn-secondary:hover {
+  box-shadow: none;
+}
+
+@media (max-width: 700px) {
+  .hero-banner::before {
+    inset: -36%;
+    opacity: 0.26;
+    filter: blur(52px);
+  }
+
+  .hero-banner::after {
+    opacity: 0.24;
+  }
+}
+
 
 
