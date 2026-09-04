@@ -1,8 +1,10 @@
+## 🩷 I love you my Honey. This website is for you so you won't have a hard time with watching movies hehe!
+
 # Mary.MattyMovies 🎬
 
-A modern, responsive, dark-cinematic personal movie streaming interface designed for desktop, tablet, and mobile devices.
+A modern, responsive, dark-cinematic personal movie streaming interface designed for my Mary Iris Martinez.
 
-Inspired by premium streaming platforms like Netflix with smooth card hover scale effects, glassmorphic navigation, continuous watching progress tracking, watchlist storage, and a custom HTML5 video player.
+Inspired by premium streaming platforms like Netflix with smooth card hover scale effects, continuous watching progress tracking, watchlist storage, and a custom HTML5 video player.
 
 ---
 
@@ -116,6 +118,9 @@ movie-site/
 │       └── providers/          # Client-side provider layer (GitHub Pages)
 │           ├── tmdbProvider.js
 │           ├── videoProvider.js
+
+
+
 │           └── movieProvider.js
 │
 ├── package.json
