@@ -218,6 +218,36 @@ window.CineStream = window.CineStream || {};
       return FALLBACK_CATALOG[0];
     },
 
+    async getTvSeasonEpisodes(id, season = 1) {
+      try {
+        const data = await tmdbFetch(`/tv/${id}/season/${season}`);
+        return {
+          season: data.season_number || season,
+          name: data.name || `Season ${season}`,
+          episodes: (data.episodes || []).map((episode) => ({
+            number: episode.episode_number,
+            title: episode.name || `Episode ${episode.episode_number}`,
+            overview: episode.overview || '',
+            runtime: episode.runtime ? `${episode.runtime} min` : '',
+            image: episode.still_path ? `${TMDB_IMG_BASE}/w500${episode.still_path}` : null
+          }))
+        };
+      } catch (error) {
+        console.warn('TMDB season fetch failed:', error);
+        return {
+          season,
+          name: `Season ${season}`,
+          episodes: Array.from({ length: 16 }, (_, index) => ({
+            number: index + 1,
+            title: `Episode ${index + 1}`,
+            overview: '',
+            runtime: '',
+            image: null
+          }))
+        };
+      }
+    },
+
     getAllMovies() {
       return FALLBACK_CATALOG;
     }

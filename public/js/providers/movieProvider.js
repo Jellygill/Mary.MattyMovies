@@ -71,7 +71,7 @@ window.CineStream = window.CineStream || {};
     },
 
     async getById(id, type = null) {
-      const useApi = await checkServerApi();
+      const useApi = type !== 'tv' && await checkServerApi();
       if (useApi) {
         const res = await fetch(`/api/movies/${encodeURIComponent(id)}`);
         const json = await res.json();
@@ -82,7 +82,7 @@ window.CineStream = window.CineStream || {};
     },
 
     async getWatchDetails(id, type = null) {
-      const useApi = await checkServerApi();
+      const useApi = type !== 'tv' && await checkServerApi();
       if (useApi) {
         const res = await fetch(`/api/watch/${encodeURIComponent(id)}`);
         const json = await res.json();
@@ -103,6 +103,10 @@ window.CineStream = window.CineStream || {};
         description: movie.description,
         playback: playback
       };
+    },
+
+    async getTvSeasonEpisodes(id, season = 1) {
+      return window.CineStream.TMDBClientProvider.getTvSeasonEpisodes(id, season);
     },
 
     async _attachClientPlayback(movie) {

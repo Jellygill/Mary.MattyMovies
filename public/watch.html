@@ -21,22 +21,31 @@
         <span>Back to Home</span>
       </a>
       <div class="player-title-display" id="playerTitle">Loading Movie...</div>
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <span class="nav-subtitle-tag" style="background: rgba(255, 105, 180, 0.2);"><i class="fa-solid fa-heart heart-pulse"></i> Cozy Movie Night</span>
+      <div class="player-context-actions">
+        <button class="player-context-btn" id="openEpisodesBtn" type="button" aria-expanded="false" hidden>
+          <i class="fa-solid fa-list-ol"></i><span>Episodes</span>
+        </button>
+        <button class="player-context-btn" id="openServersBtn" type="button" aria-expanded="false" hidden>
+          <i class="fa-solid fa-server"></i><span>Server</span>
+        </button>
       </div>
     </div>
 
-    <!-- Server Selector Overlay Bar -->
-    <div class="server-selector-bar" id="serverSelectorBar" style="display: none;">
-      <span class="server-bar-label"><i class="fa-solid fa-server"></i> Switch Server:</span>
-      <div class="server-btn-list" id="serverBtnList"></div>
-    </div>
-
-    <!-- TV Episode Selector Bar -->
-    <div class="tv-episode-selector-bar" id="tvEpisodeSelectorBar" style="display: none;">
-      <span class="server-bar-label"><i class="fa-solid fa-list-ol"></i> Episode:</span>
-      <div class="episode-btn-list" id="episodeBtnList"></div>
-    </div>
+    <div class="player-menu-scrim" id="playerMenuScrim" hidden></div>
+    <aside class="player-context-menu episode-drawer" id="episodeDrawer" aria-label="Episodes" hidden>
+      <div class="player-menu-heading">
+        <div><span>Episodes</span><strong id="drawerShowTitle"></strong><small id="drawerSeasonLabel"></small></div>
+        <button class="player-menu-close" type="button" data-close-menu aria-label="Close episodes"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="player-episode-list" id="drawerEpisodeList"></div>
+    </aside>
+    <aside class="player-context-menu server-menu" id="serverMenu" aria-label="Playback servers" hidden>
+      <div class="player-menu-heading">
+        <div><span>Playback</span><strong>Choose a server</strong></div>
+        <button class="player-menu-close" type="button" data-close-menu aria-label="Close server menu"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="player-server-list" id="serverBtnList"></div>
+    </aside>
 
     <!-- Direct HTML5 Video Player Container -->
     <video class="player-video-element" id="mainVideoPlayer" preload="metadata" crossorigin="anonymous" style="display: none;">

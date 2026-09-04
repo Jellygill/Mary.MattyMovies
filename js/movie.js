@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!link || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
     const destination = new URL(link.href, window.location.href);
-    if (destination.origin !== window.location.origin || !/watch\.html$/.test(destination.pathname)) return;
+    if (destination.origin !== window.location.origin || !/(watch|episodes)\.html$/.test(destination.pathname)) return;
 
     event.preventDefault();
     document.body.classList.add('cinema-leaving');
@@ -73,7 +73,9 @@ function renderMovieDetails(movie, watchDetails, storage) {
 
   if (watchBtn) {
     const type = movie.mediaType || 'movie';
-    watchBtn.href = `./watch.html?id=${encodeURIComponent(movie.id)}&type=${type}&v=1.0.1`;
+    watchBtn.href = type === 'tv'
+      ? `./episodes.html?id=${encodeURIComponent(movie.id)}&type=tv`
+      : `./watch.html?id=${encodeURIComponent(movie.id)}&type=movie&v=1.0.1`;
   }
 
   if (trailerIframe && watchDetails.playback && watchDetails.playback.trailerUrl) {

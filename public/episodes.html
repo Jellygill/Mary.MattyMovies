@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>Choose an Episode - Mary.MattyMovies</title>
+  <meta name="description" content="Choose an episode before watching on Mary.MattyMovies.">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="episode-selection-page">
+  <main class="episode-selection" id="episodeSelection">
+    <div class="episode-selection-veil"></div>
+    <a class="episode-back-link" href="./index.html"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+    <div class="episode-selection-content">
+      <img class="episode-show-poster" id="episodeShowPoster" src="" alt="">
+      <section class="episode-show-info">
+        <p class="episode-kicker">Choose what to watch</p>
+        <h1 id="episodeShowTitle">Loading series...</h1>
+        <p class="episode-show-meta" id="episodeShowMeta"></p>
+        <p class="episode-show-description" id="episodeShowDescription"></p>
+        <div class="episode-season-label" id="episodeSeasonLabel">Season 1</div>
+        <div class="episode-grid" id="episodeGrid" aria-live="polite"></div>
+        <a class="btn btn-primary episode-watch-btn" id="startEpisodeBtn" href="#">
+          <i class="fa-solid fa-play"></i><span>Start Watching</span>
+        </a>
+      </section>
+    </div>
+  </main>
+  <script src="./js/providers/tmdbProvider.js"></script>
+  <script src="./js/providers/videoProvider.js"></script>
+  <script src="./js/providers/movieProvider.js"></script>
+  <script src="./js/episodes.js"></script>
+</body>
+</html>

@@ -2071,5 +2071,375 @@ body.cinema-leaving {
   }
 }
 
+/* Episode selection and contextual player controls */
+.episode-selection-page {
+  min-height: 100vh;
+  background: var(--color-canvas-deep);
+  transition: opacity var(--dur-medium) var(--ease-out);
+}
+
+.episode-selection-page.episode-selection-leaving {
+  opacity: 0;
+}
+
+.episode-selection {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  padding: clamp(1.5rem, 5vw, 4rem) var(--page-gutter);
+  background-position: center;
+  background-size: cover;
+}
+
+.episode-selection::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  background: linear-gradient(90deg, var(--color-canvas-deep) 0%, var(--color-cinematic-veil) 48%, var(--color-overlay-soft) 100%);
+}
+
+.episode-selection-veil {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(0deg, var(--color-canvas-deep) 0%, transparent 60%);
+}
+
+.episode-back-link,
+.player-back-btn {
+  position: relative;
+  z-index: 2;
+}
+
+.episode-selection-content {
+  display: grid;
+  grid-template-columns: minmax(11rem, 16rem) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: end;
+  width: min(100%, var(--content-width));
+  min-height: calc(100vh - 10rem);
+  margin: 0 auto;
+  padding-block: var(--space-3xl) var(--space-xl);
+}
+
+.episode-show-poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-hero-depth);
+}
+
+.episode-kicker,
+.episode-season-label,
+.player-menu-heading > div > span,
+.player-episode-option small {
+  color: var(--color-accent-soft);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.episode-show-info {
+  max-width: 58rem;
+}
+
+.episode-show-info h1 {
+  max-width: 12ch;
+  margin: var(--space-2xs) 0;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 400;
+  line-height: .95;
+  overflow-wrap: anywhere;
+}
+
+.episode-show-meta,
+.episode-show-description {
+  max-width: 45rem;
+  color: var(--color-ink-soft);
+}
+
+.episode-show-description {
+  margin-block: var(--space-sm) var(--space-lg);
+  line-height: 1.65;
+}
+
+.episode-season-label {
+  margin-bottom: var(--space-sm);
+}
+
+.episode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--space-xs);
+  max-height: 24rem;
+  overflow: auto;
+  padding-right: var(--space-2xs);
+}
+
+.episode-choice,
+.player-episode-option,
+.player-server-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-xs);
+  color: var(--color-ink);
+  text-align: left;
+  background: var(--color-glass-surface);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-input);
+  transition: background var(--dur-medium) var(--ease-out), border-color var(--dur-medium) var(--ease-out), transform var(--dur-short) var(--ease-out);
+}
+
+.episode-choice:hover,
+.player-episode-option:hover,
+.player-server-option:hover {
+  background: var(--color-surface-raised);
+  border-color: var(--color-rule-strong);
+  transform: translateY(-2px);
+}
+
+.episode-choice.is-selected,
+.player-episode-option.is-selected,
+.player-server-option.is-selected {
+  background: var(--color-accent-wash);
+  border-color: var(--color-accent);
+}
+
+.episode-choice img,
+.episode-choice-placeholder {
+  flex: 0 0 5rem;
+  width: 5rem;
+  height: 3.25rem;
+  object-fit: cover;
+  border-radius: var(--radius-input);
+}
+
+.episode-choice-placeholder,
+.player-episode-placeholder {
+  display: grid;
+  place-items: center;
+  background: var(--color-surface-soft);
+  color: var(--color-muted);
+}
+
+.episode-choice-copy,
+.player-episode-option > span {
+  display: grid;
+  gap: var(--space-3xs);
+  min-width: 0;
+}
+
+.episode-choice-copy strong,
+.player-episode-option strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.episode-choice-number,
+.episode-choice-copy small {
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+}
+
+.episode-choice-play {
+  margin-left: auto;
+  color: var(--color-accent);
+}
+
+.episode-watch-btn {
+  margin-top: var(--space-lg);
+}
+
+.player-top-bar {
+  height: 68px;
+  padding-inline: var(--page-gutter);
+  background: linear-gradient(180deg, var(--color-overlay) 0%, transparent 100%);
+}
+
+.player-title-display {
+  position: absolute;
+  left: 50%;
+  max-width: min(45vw, 38rem);
+  overflow: hidden;
+  color: var(--color-ink-soft);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-align: center;
+  text-overflow: ellipsis;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.player-context-actions {
+  display: flex;
+  gap: var(--space-2xs);
+  margin-left: auto;
+}
+
+.player-context-btn,
+.player-menu-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2xs);
+  min-height: 2.25rem;
+  padding-inline: var(--space-xs);
+  color: var(--color-ink-soft);
+  background: var(--color-glass-surface);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-input);
+  transition: background var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out);
+}
+
+.player-context-btn:hover,
+.player-context-btn[aria-expanded="true"] {
+  background: var(--color-surface-raised);
+  border-color: var(--color-rule-strong);
+}
+
+.player-menu-scrim {
+  position: absolute;
+  z-index: 58;
+  inset: 0;
+  background: var(--color-overlay-soft);
+  backdrop-filter: blur(3px);
+}
+
+.player-context-menu {
+  position: absolute;
+  z-index: 60;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(28rem, 90vw);
+  padding: var(--space-lg);
+  overflow: auto;
+  background: var(--color-glass-surface);
+  border-left: var(--rule-hair) solid var(--color-rule);
+  box-shadow: var(--shadow-hero-depth);
+  opacity: 0;
+  transform: translateX(2rem);
+  transition: opacity var(--dur-medium) var(--ease-out), transform var(--dur-medium) var(--ease-out);
+}
+
+.player-context-menu.is-open {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.player-menu-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.player-menu-heading > div {
+  display: grid;
+  gap: var(--space-3xs);
+}
+
+.player-menu-heading strong {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 400;
+}
+
+.player-menu-heading small {
+  color: var(--color-muted);
+}
+
+.player-menu-close {
+  flex: 0 0 2.25rem;
+  padding: 0;
+}
+
+.player-episode-list,
+.player-server-list {
+  display: grid;
+  gap: var(--space-2xs);
+}
+
+.player-episode-option {
+  min-height: 4.75rem;
+}
+
+.player-episode-option img,
+.player-episode-placeholder {
+  flex: 0 0 6rem;
+  width: 6rem;
+  height: 3.75rem;
+  object-fit: cover;
+  border-radius: var(--radius-input);
+}
+
+.player-episode-option > .fa-play {
+  margin-left: auto;
+  color: var(--color-accent);
+}
+
+.player-server-option {
+  min-height: 3.25rem;
+}
+
+.player-server-option i {
+  color: var(--color-accent);
+}
+
+@media (max-width: 700px) {
+  .episode-selection-content {
+    grid-template-columns: 1fr;
+    align-items: start;
+    min-height: auto;
+    padding-top: var(--space-2xl);
+  }
+
+  .episode-show-poster {
+    width: min(11rem, 40vw);
+  }
+
+  .episode-grid {
+    grid-template-columns: 1fr;
+    max-height: none;
+  }
+
+  .player-title-display {
+    position: static;
+    max-width: none;
+    margin-left: auto;
+    transform: none;
+  }
+
+  .player-context-actions {
+    position: absolute;
+    right: var(--page-gutter);
+    top: 4.5rem;
+  }
+
+  .player-context-menu {
+    top: auto;
+    width: 100%;
+    max-height: 72dvh;
+    border-top: var(--rule-hair) solid var(--color-rule);
+    border-left: 0;
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+    transform: translateY(2rem);
+  }
+
+  .player-context-menu.is-open {
+    transform: translateY(0);
+  }
+}
+
 
 

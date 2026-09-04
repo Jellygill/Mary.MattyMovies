@@ -79,7 +79,7 @@ function initCinematicMotion() {
     if (!link || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
     const destination = new URL(link.href, window.location.href);
-    if (destination.origin !== window.location.origin || !/(movie|watch)\.html$/.test(destination.pathname)) return;
+    if (destination.origin !== window.location.origin || !/(movie|watch|episodes)\.html$/.test(destination.pathname)) return;
 
     event.preventDefault();
     document.body.classList.add('cinema-leaving');
@@ -120,8 +120,13 @@ async function initHero(provider, storage) {
       genresEl.innerHTML = hero.genres.map(g => `<span class="genre-tag">${g}</span>`).join('');
     }
 
-    if (watchBtn) watchBtn.href = `./watch.html?id=${encodeURIComponent(hero.id)}`;
-    if (infoBtn) infoBtn.href = `./movie.html?id=${encodeURIComponent(hero.id)}`;
+    const type = hero.mediaType || 'movie';
+    if (watchBtn) {
+      watchBtn.href = type === 'tv'
+        ? `./episodes.html?id=${encodeURIComponent(hero.id)}&type=tv`
+        : `./watch.html?id=${encodeURIComponent(hero.id)}&type=movie`;
+    }
+    if (infoBtn) infoBtn.href = `./movie.html?id=${encodeURIComponent(hero.id)}&type=${type}`;
 
     if (watchlistBtn) {
       watchlistBtn.onclick = () => {

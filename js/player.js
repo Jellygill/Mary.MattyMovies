@@ -1,332 +1,197 @@
-/**
- * player.js - Video Player Controller
- * Handles direct HTML5 video playback with custom UI controls,
- * iframe embed fallback with server switcher and TV episode selector.
- */
-
 document.addEventListener('DOMContentLoaded', async () => {
   const provider = window.CineStream.MovieProvider;
   const storage = window.CineStream.Storage;
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const movieId = urlParams.get('id') || 'tears-of-steel';
-  const mediaType = urlParams.get('type') || null;
-
-  const playerContainer = document.getElementById('playerContainer');
+  const params = new URLSearchParams(window.location.search);
+  const movieId = params.get('id') || 'tears-of-steel';
+  const mediaType = params.get('type') || null;
+  let season = Math.max(1, Number(params.get('season')) || 1);
+  let episode = Math.max(1, Number(params.get('episode')) || 1);
+  let serverIndex = Math.max(0, Number(params.get('server')) || 0);
+  const player = document.getElementById('playerContainer');
   const video = document.getElementById('mainVideoPlayer');
   const iframe = document.getElementById('mainIframePlayer');
-  const playerTitle = document.getElementById('playerTitle');
-  const playerControls = document.getElementById('playerControls');
-  
-  const playPauseBtn = document.getElementById('playPauseBtn');
-  const skipBackBtn = document.getElementById('skipBackBtn');
-  const skipForwardBtn = document.getElementById('skipForwardBtn');
-  const muteBtn = document.getElementById('muteBtn');
-  const volumeSlider = document.getElementById('volumeSlider');
-  const seekbarWrapper = document.getElementById('seekbarWrapper');
-  const seekbarFill = document.getElementById('seekbarFill');
-  const timeDisplay = document.getElementById('timeDisplay');
-  const speedSelect = document.getElementById('speedSelect');
-  const subtitleSelect = document.getElementById('subtitleSelect');
-  const pipBtn = document.getElementById('pipBtn');
-  const fullscreenBtn = document.getElementById('fullscreenBtn');
+  const controls = document.getElementById('playerControls');
+  const episodesButton = document.getElementById('openEpisodesBtn');
+  const serversButton = document.getElementById('openServersBtn');
+  const episodeDrawer = document.getElementById('episodeDrawer');
+  const serverMenu = document.getElementById('serverMenu');
+  const scrim = document.getElementById('playerMenuScrim');
+  let watchData;
+  let seasonData;
+  let servers = [];
 
-  let currentSeason = 1;
-  let currentEpisode = 1;
-  let currentServerIndex = 0;
+  const escapeHTML = (value) => {
+    const element = document.createElement('div');
+    element.textContent = value || '';
+    return element.innerHTML;
+  };
+
+  const closeMenus = () => {
+    [episodeDrawer, serverMenu].forEach((menu) => { menu.hidden = true; menu.classList.remove('is-open'); });
+    scrim.hidden = true;
+    episodesButton.setAttribute('aria-expanded', 'false');
+    serversButton.setAttribute('aria-expanded', 'false');
+  };
+  const openMenu = (menu, button) => {
+    closeMenus();
+    menu.hidden = false;
+    scrim.hidden = false;
+    requestAnimationFrame(() => menu.classList.add('is-open'));
+    button.setAttribute('aria-expanded', 'true');
+    player.classList.add('controls-visible');
+  };
+  const persistState = () => {
+    const next = new URL(window.location.href);
+    next.searchParams.set('id', movieId);
+    next.searchParams.set('type', watchData.mediaType || mediaType || 'movie');
+    next.searchParams.set('server', serverIndex);
+    if (watchData.mediaType === 'tv') {
+      next.searchParams.set('season', season);
+      next.searchParams.set('episode', episode);
+    }
+    history.replaceState({}, '', next);
+  };
+  const updateEmbed = () => {
+    const server = servers[serverIndex] || servers[0];
+    if (!server) return;
+    iframe.src = watchData.mediaType === 'tv'
+      ? server.getTvUrl(watchData.id, season, episode, watchData.imdbId)
+      : server.getMovieUrl(watchData.id, watchData.imdbId);
+    persistState();
+  };
+  const renderServers = () => {
+    const list = document.getElementById('serverBtnList');
+    list.innerHTML = servers.map((server, index) => `
+      <button class="player-server-option ${index === serverIndex ? 'is-selected' : ''}" type="button" data-server="${index}">
+        <i class="fa-solid fa-${index === serverIndex ? 'circle-check' : 'server'}"></i><span>${escapeHTML(server.name)}</span>
+      </button>`).join('');
+    list.querySelectorAll('[data-server]').forEach((button) => button.onclick = () => {
+      serverIndex = Number(button.dataset.server);
+      renderServers();
+      updateEmbed();
+      closeMenus();
+    });
+  };
+  const renderEpisodes = () => {
+    document.getElementById('drawerShowTitle').textContent = watchData.title;
+    document.getElementById('drawerSeasonLabel').textContent = seasonData.name || `Season ${season}`;
+    const list = document.getElementById('drawerEpisodeList');
+    list.innerHTML = seasonData.episodes.map((item) => `
+      <button class="player-episode-option ${item.number === episode ? 'is-selected' : ''}" type="button" data-episode="${item.number}">
+        ${item.image ? `<img src="${item.image}" alt="">` : '<span class="player-episode-placeholder"><i class="fa-solid fa-film"></i></span>'}
+        <span><small>Episode ${item.number}</small><strong>${escapeHTML(item.title)}</strong></span>
+        ${item.number === episode ? '<i class="fa-solid fa-play"></i>' : ''}
+      </button>`).join('');
+    list.querySelectorAll('[data-episode]').forEach((button) => button.onclick = () => {
+      episode = Number(button.dataset.episode);
+      renderEpisodes();
+      updateEmbed();
+      closeMenus();
+    });
+  };
 
   try {
-    const watchData = await provider.getWatchDetails(movieId, mediaType);
+    watchData = await provider.getWatchDetails(movieId, mediaType);
     if (!watchData) return;
-
-    playerTitle.textContent = `${watchData.title} (${watchData.year})`;
+    document.getElementById('playerTitle').textContent = `${watchData.title} (${watchData.year})`;
     document.title = `Watching ${watchData.title} - Mary.MattyMovies`;
-
-    const playback = watchData.playback || {};
-
-    if (playback.type === 'embed') {
-      // Authorized Iframe Embed Mode
+    if (watchData.playback?.type === 'embed') {
       iframe.style.display = 'block';
-      iframe.src = playback.url;
       video.style.display = 'none';
-      playerControls.style.display = 'none';
-
-      setupServerSelector(iframe, playback.servers, watchData);
-      setupEpisodeSelector(iframe, watchData);
+      controls.style.display = 'none';
+      servers = window.CineStream.VideoClientProvider.EMBED_SERVERS;
+      serverIndex = Math.min(serverIndex, Math.max(0, servers.length - 1));
+      serversButton.hidden = servers.length === 0;
+      renderServers();
+      if (watchData.mediaType === 'tv') {
+        seasonData = await provider.getTvSeasonEpisodes(movieId, season);
+        if (!seasonData.episodes.some((item) => item.number === episode)) episode = seasonData.episodes[0]?.number || 1;
+        episodesButton.hidden = false;
+        renderEpisodes();
+      }
+      updateEmbed();
     } else {
-      // Direct HTML5 Video Player Mode
       video.style.display = 'block';
-      playerControls.style.display = 'flex';
+      controls.style.display = 'flex';
       iframe.style.display = 'none';
-
-      setupDirectVideoPlayer(video, playback, watchData, storage);
+      setupDirectVideoPlayer(video, watchData.playback || {}, watchData, storage, player);
     }
-  } catch (err) {
-    console.error('Failed to initialize video player', err);
+  } catch (error) {
+    console.error('Failed to initialize video player', error);
   }
 
-  function setupServerSelector(iframe, servers, watchData) {
-    const serverBar = document.getElementById('serverSelectorBar');
-    const serverList = document.getElementById('serverBtnList');
-    if (!serverBar || !serverList || !servers || servers.length === 0) return;
-
-    serverBar.style.display = 'flex';
-    serverList.innerHTML = servers.map((srv, idx) => `
-      <button class="server-btn ${idx === 0 ? 'active' : ''}" data-index="${idx}">
-        <i class="fa-solid fa-play"></i> ${srv.name}
-      </button>
-    `).join('');
-
-    const buttons = serverList.querySelectorAll('.server-btn');
-    buttons.forEach(btn => {
-      btn.onclick = () => {
-        buttons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentServerIndex = parseInt(btn.getAttribute('data-index'), 10);
-        updateStreamUrl(iframe, watchData);
-      };
-    });
-  }
-
-  function setupEpisodeSelector(iframe, watchData) {
-    const epBar = document.getElementById('tvEpisodeSelectorBar');
-    const epList = document.getElementById('episodeBtnList');
-    if (!epBar || !epList || watchData.mediaType !== 'tv') return;
-
-    epBar.style.display = 'flex';
-    const totalEps = 16;
-    epList.innerHTML = Array.from({ length: totalEps }, (_, i) => i + 1).map(epNum => `
-      <button class="episode-btn ${epNum === 1 ? 'active' : ''}" data-ep="${epNum}">
-        Ep ${epNum}
-      </button>
-    `).join('');
-
-    const epButtons = epList.querySelectorAll('.episode-btn');
-    epButtons.forEach(btn => {
-      btn.onclick = () => {
-        epButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentEpisode = parseInt(btn.getAttribute('data-ep'), 10);
-        updateStreamUrl(iframe, watchData);
-      };
-    });
-  }
-
-  function updateStreamUrl(iframe, watchData) {
-    const servers = window.CineStream.VideoClientProvider.EMBED_SERVERS;
-    const srv = servers[currentServerIndex] || servers[0];
-    const isTV = watchData.mediaType === 'tv';
-    const newUrl = isTV
-      ? srv.getTvUrl(watchData.id, currentSeason, currentEpisode, watchData.imdbId)
-      : srv.getMovieUrl(watchData.id, watchData.imdbId);
-    iframe.src = newUrl;
-  }
-
-  function setupDirectVideoPlayer(video, playback, watchData, storage) {
-    video.src = playback.url;
-
-    // Attach Subtitle Tracks
-    if (playback.subtitles && playback.subtitles.length > 0) {
-      subtitleSelect.innerHTML = '<option value="off">Subtitles Off</option>';
-      playback.subtitles.forEach((sub, idx) => {
-        const track = document.createElement('track');
-        track.kind = 'subtitles';
-        track.label = sub.label;
-        track.srclang = sub.srclang;
-        track.src = sub.src;
-        if (sub.default) track.default = true;
-        video.appendChild(track);
-
-        const opt = document.createElement('option');
-        opt.value = idx;
-        opt.textContent = sub.label;
-        if (sub.default) opt.selected = true;
-        subtitleSelect.appendChild(opt);
-      });
-    }
-
-    // Auto-Resume Progress Check
-    const savedProgress = storage.getProgress(watchData.id);
-    if (savedProgress && savedProgress.currentTime > 5) {
-      video.currentTime = savedProgress.currentTime;
-    }
-
-    // Play / Pause Toggle
-    function togglePlay() {
-      if (video.paused) {
-        video.play();
-      } else {
-        video.pause();
-      }
-    }
-
-    playPauseBtn.onclick = togglePlay;
-    video.onclick = togglePlay;
-
-    video.addEventListener('play', () => {
-      playPauseBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-    });
-
-    video.addEventListener('pause', () => {
-      playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-    });
-
-    // Time Update & Seek Bar Fill
-    video.addEventListener('timeupdate', () => {
-      if (!video.duration) return;
-      const pct = (video.currentTime / video.duration) * 100;
-      seekbarFill.style.width = `${pct}%`;
-      timeDisplay.textContent = `${storage.formatTime(video.currentTime)} / ${storage.formatTime(video.duration)}`;
-    });
-
-    // Save Progress every 5 seconds
-    let lastSave = 0;
-    video.addEventListener('timeupdate', () => {
-      const now = Date.now();
-      if (now - lastSave > 5000) {
-        lastSave = now;
-        storage.saveProgress(watchData.id, watchData, video.currentTime, video.duration);
-      }
-    });
-
-    // Seekbar Interaction
-    seekbarWrapper.onclick = (e) => {
-      const rect = seekbarWrapper.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const pct = clickX / rect.width;
-      video.currentTime = pct * video.duration;
-    };
-
-    // Rewind / Fast-Forward 5s
-    skipBackBtn.onclick = () => { video.currentTime = Math.max(0, video.currentTime - 5); };
-    skipForwardBtn.onclick = () => { video.currentTime = Math.min(video.duration, video.currentTime + 5); };
-
-    // Volume & Mute Controls
-    volumeSlider.oninput = (e) => {
-      video.volume = parseFloat(e.target.value);
-      video.muted = (video.volume === 0);
-      updateVolumeIcon();
-    };
-
-    muteBtn.onclick = () => {
-      video.muted = !video.muted;
-      updateVolumeIcon();
-    };
-
-    function updateVolumeIcon() {
-      if (video.muted || video.volume === 0) {
-        muteBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
-        volumeSlider.value = 0;
-      } else if (video.volume < 0.5) {
-        muteBtn.innerHTML = '<i class="fa-solid fa-volume-low"></i>';
-        volumeSlider.value = video.volume;
-      } else {
-        muteBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
-        volumeSlider.value = video.volume;
-      }
-    }
-
-    // Playback Speed Selector
-    speedSelect.onchange = (e) => {
-      video.playbackRate = parseFloat(e.target.value);
-    };
-
-    // Subtitle Track Selector
-    subtitleSelect.onchange = (e) => {
-      const val = e.target.value;
-      for (let i = 0; i < video.textTracks.length; i++) {
-        video.textTracks[i].mode = (val !== 'off' && parseInt(val, 10) === i) ? 'showing' : 'hidden';
-      }
-    };
-
-    // Picture in Picture
-    if (pipBtn && document.pictureInPictureEnabled) {
-      pipBtn.onclick = async () => {
-        try {
-          if (document.pictureInPictureElement) {
-            await document.exitPictureInPicture();
-          } else {
-            await video.requestPictureInPicture();
-          }
-        } catch (e) {
-          console.error('PiP failed', e);
-        }
-      };
-    }
-
-    // Fullscreen Toggle
-    fullscreenBtn.onclick = () => {
-      if (!document.fullscreenElement) {
-        playerContainer.requestFullscreen().catch(err => console.error(err));
-      } else {
-        document.exitFullscreen();
-      }
-    };
-
-    // Auto-hide controls overlay on idle
-    let idleTimeout = null;
-    function resetIdleTimer() {
-      playerContainer.classList.add('controls-visible');
-      clearTimeout(idleTimeout);
-      if (!video.paused) {
-        idleTimeout = setTimeout(() => {
-          playerContainer.classList.remove('controls-visible');
-        }, 3500);
-      }
-    }
-    playerContainer.onmousemove = resetIdleTimer;
-    resetIdleTimer();
-
-    // Hotkey Controls
-    document.addEventListener('keydown', (e) => {
-      if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'SELECT') return;
-
-      switch (e.key) {
-        case ' ':
-        case 'k':
-          e.preventDefault();
-          togglePlay();
-          resetIdleTimer();
-          break;
-        case 'f':
-          e.preventDefault();
-          fullscreenBtn.click();
-          break;
-        case 'm':
-          e.preventDefault();
-          muteBtn.click();
-          resetIdleTimer();
-          break;
-        case 'ArrowLeft':
-          e.preventDefault();
-          skipBackBtn.click();
-          resetIdleTimer();
-          break;
-        case 'ArrowRight':
-          e.preventDefault();
-          skipForwardBtn.click();
-          resetIdleTimer();
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          video.volume = Math.min(1, video.volume + 0.1);
-          volumeSlider.value = video.volume;
-          updateVolumeIcon();
-          resetIdleTimer();
-          break;
-        case 'ArrowDown':
-          e.preventDefault();
-          video.volume = Math.max(0, video.volume - 0.1);
-          volumeSlider.value = video.volume;
-          updateVolumeIcon();
-          resetIdleTimer();
-          break;
-      }
-    });
-
-    // Auto-start video when loaded
-    video.play().catch(() => {
-      // Autoplay blocked by browser policy; user can click play
-    });
-  }
+  episodesButton.onclick = () => openMenu(episodeDrawer, episodesButton);
+  serversButton.onclick = () => openMenu(serverMenu, serversButton);
+  scrim.onclick = closeMenus;
+  document.querySelectorAll('[data-close-menu]').forEach((button) => button.onclick = closeMenus);
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeMenus(); });
 });
+
+function setupDirectVideoPlayer(video, playback, watchData, storage, player) {
+  const $ = (id) => document.getElementById(id);
+  const playPause = $('playPauseBtn');
+  const skipBack = $('skipBackBtn');
+  const skipForward = $('skipForwardBtn');
+  const mute = $('muteBtn');
+  const volume = $('volumeSlider');
+  const seekbar = $('seekbarWrapper');
+  const fill = $('seekbarFill');
+  const time = $('timeDisplay');
+  const speed = $('speedSelect');
+  const subtitles = $('subtitleSelect');
+  const pip = $('pipBtn');
+  const fullscreen = $('fullscreenBtn');
+  video.src = playback.url;
+  (playback.subtitles || []).forEach((sub, index) => {
+    const track = document.createElement('track');
+    Object.assign(track, { kind: 'subtitles', label: sub.label, srclang: sub.srclang, src: sub.src, default: Boolean(sub.default) });
+    video.appendChild(track);
+    subtitles.insertAdjacentHTML('beforeend', `<option value="${index}" ${sub.default ? 'selected' : ''}>${sub.label}</option>`);
+  });
+  const saved = storage.getProgress(watchData.id);
+  if (saved?.currentTime > 5) video.currentTime = saved.currentTime;
+  const togglePlay = () => video.paused ? video.play() : video.pause();
+  const updateVolume = () => {
+    mute.innerHTML = `<i class="fa-solid fa-volume-${video.muted || video.volume === 0 ? 'xmark' : video.volume < .5 ? 'low' : 'high'}"></i>`;
+    volume.value = video.muted ? 0 : video.volume;
+  };
+  playPause.onclick = togglePlay;
+  video.onclick = togglePlay;
+  video.onplay = () => { playPause.innerHTML = '<i class="fa-solid fa-pause"></i>'; };
+  video.onpause = () => { playPause.innerHTML = '<i class="fa-solid fa-play"></i>'; };
+  video.ontimeupdate = () => {
+    if (!video.duration) return;
+    fill.style.width = `${video.currentTime / video.duration * 100}%`;
+    time.textContent = `${storage.formatTime(video.currentTime)} / ${storage.formatTime(video.duration)}`;
+  };
+  let lastSaved = 0;
+  video.addEventListener('timeupdate', () => {
+    if (Date.now() - lastSaved > 5000) {
+      lastSaved = Date.now();
+      storage.saveProgress(watchData.id, watchData, video.currentTime, video.duration);
+    }
+  });
+  seekbar.onclick = (event) => { const rect = seekbar.getBoundingClientRect(); video.currentTime = (event.clientX - rect.left) / rect.width * video.duration; };
+  skipBack.onclick = () => { video.currentTime = Math.max(0, video.currentTime - 5); };
+  skipForward.onclick = () => { video.currentTime = Math.min(video.duration, video.currentTime + 5); };
+  volume.oninput = (event) => { video.volume = Number(event.target.value); video.muted = video.volume === 0; updateVolume(); };
+  mute.onclick = () => { video.muted = !video.muted; updateVolume(); };
+  speed.onchange = (event) => { video.playbackRate = Number(event.target.value); };
+  subtitles.onchange = (event) => [...video.textTracks].forEach((track, index) => { track.mode = event.target.value !== 'off' && Number(event.target.value) === index ? 'showing' : 'hidden'; });
+  if (pip && document.pictureInPictureEnabled) pip.onclick = () => document.pictureInPictureElement ? document.exitPictureInPicture() : video.requestPictureInPicture();
+  fullscreen.onclick = () => document.fullscreenElement ? document.exitFullscreen() : player.requestFullscreen();
+  let idleTimer;
+  const resetIdleTimer = () => {
+    player.classList.add('controls-visible');
+    clearTimeout(idleTimer);
+    if (!video.paused) idleTimer = setTimeout(() => player.classList.remove('controls-visible'), 3500);
+  };
+  player.onmousemove = resetIdleTimer;
+  document.addEventListener('keydown', (event) => {
+    if (['INPUT', 'SELECT'].includes(document.activeElement.tagName)) return;
+    const action = { ' ': togglePlay, k: togglePlay, f: () => fullscreen.click(), m: () => mute.click(), ArrowLeft: () => skipBack.click(), ArrowRight: () => skipForward.click() }[event.key];
+    if (action) { event.preventDefault(); action(); resetIdleTimer(); }
+  });
+  resetIdleTimer();
+  video.play().catch(() => {});
+}
