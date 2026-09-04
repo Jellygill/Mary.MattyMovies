@@ -1474,7 +1474,7 @@ body { background-image: linear-gradient(135deg, var(--color-canvas-deep), var(-
 @media (max-width: 768px) { .site-header { height: 64px; } .nav-links { display: none; } .hero-banner { height: 78dvh; min-height: 640px; padding-bottom: var(--space-2xl); } .details-page-wrapper { padding-top: 64px; } .details-content-grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); text-align: left; } .details-poster { max-width: 210px; margin: 0; } .details-meta-row { justify-content: flex-start; } }
 @media (max-width: 480px) { .site-header { padding-inline: var(--space-sm); } .nav-brand { font-size: var(--text-sm); } .brand-icon-img { width: 34px; height: 34px; } .hero-banner { min-height: 620px; padding-inline: var(--space-sm); } .melody-hero-sticker { width: 100px; right: var(--space-sm); opacity: .62; } .hero-title { font-size: clamp(3.25rem, 17vw, 4.6rem); } .hero-description { font-size: var(--text-sm); } .main-container { padding-top: var(--space-xl); gap: var(--space-2xl); } .movie-card { flex-basis: 152px; width: 152px; } .movie-card.progress-card { flex-basis: 250px; width: 250px; } .carousel-btn { display: none; } .details-hero { padding: var(--space-2xl) var(--space-sm); } .details-title { font-size: clamp(3rem, 15vw, 4.5rem); } .player-title-display, .player-top-bar .nav-subtitle-tag { display: none; } }
 @media (prefers-reduced-motion: reduce) { .heart-pulse, .melody-hero-sticker, .empty-watchlist-img, .skeleton { animation: none; } }
-+/* --- Radiant Rose revision --- */
+/* --- Radiant Rose revision --- */
 .site-header {
   box-shadow: 0 10px 34px var(--color-overlay);
 }
@@ -1604,8 +1604,148 @@ body { background-image: linear-gradient(135deg, var(--color-canvas-deep), var(-
     text-shadow: 0 4px 22px var(--color-overlay), 0 0 24px var(--color-accent-aura);
   }
 
-  .movie-card:hover .card-poster-wrapper {
+.movie-card:hover .card-poster-wrapper {
     box-shadow: 0 10px 22px var(--color-overlay), 0 0 18px var(--color-accent-aura);
+  }
+}
+.hero-banner {
+  background-color: var(--color-canvas-deep);
+  box-shadow: inset 0 -80px 100px var(--color-canvas), inset 0 0 110px var(--color-accent-hot-haze);
+}
+
+.hero-backdrop-overlay {
+  background:
+    linear-gradient(90deg, var(--color-canvas) 0%, var(--color-overlay) 36%, transparent 72%),
+    linear-gradient(0deg, var(--color-canvas) 0%, transparent 55%),
+    radial-gradient(circle at 75% 60%, var(--color-accent-hot-wash) 0%, transparent 33%),
+    radial-gradient(circle at 46% 110%, var(--color-accent-hot-haze) 0%, transparent 46%);
+}
+
+.hero-banner::after {
+  background:
+    radial-gradient(circle at 83% 26%, var(--color-accent-hot-haze) 0%, transparent 21%),
+    radial-gradient(circle at 68% 82%, var(--color-accent-hot-wash) 0%, transparent 24%);
+  mix-blend-mode: normal;
+  opacity: 0.9;
+}
+
+.hero-content {
+  filter: drop-shadow(0 0 18px var(--color-overlay));
+}
+
+.hero-title {
+  color: var(--color-ink);
+  text-shadow: 0 0 12px var(--color-accent-hot), 0 0 40px var(--color-accent-hot-haze), 0 8px 30px var(--color-overlay);
+}
+
+.hero-couple-tag,
+.hero-badge {
+  border-color: var(--color-accent-hot);
+  box-shadow: 0 0 12px var(--color-accent-hot), 0 0 30px var(--color-accent-hot-haze);
+}
+
+.hero-couple-tag {
+  background: var(--color-accent-hot-wash);
+  color: var(--color-canvas-deep);
+}
+
+.melody-hero-sticker {
+  filter: drop-shadow(0 0 12px var(--color-accent-hot)) drop-shadow(0 0 40px var(--color-accent-hot-haze));
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-accent-hot), var(--color-accent-strong));
+  border-color: var(--color-accent-soft);
+  box-shadow: 0 0 0 3px var(--color-accent-hot-haze), var(--shadow-hot);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--color-accent-soft), var(--color-accent-hot));
+  box-shadow: 0 0 0 5px var(--color-accent-hot-haze), 0 0 26px var(--color-accent-hot), 0 0 82px var(--color-accent-hot-haze);
+}
+
+.section-title {
+  text-shadow: 0 0 16px var(--color-accent-hot-haze);
+}
+
+.section-indicator {
+  width: 34px;
+  height: 3px;
+  background: var(--color-accent-hot);
+  box-shadow: 0 0 10px var(--color-accent-hot), 0 0 28px var(--color-accent-hot-haze);
+}
+
+.movie-row-grid {
+  padding-top: var(--space-md);
+  padding-bottom: var(--space-lg);
+  background: linear-gradient(90deg, var(--color-accent-hot-haze), transparent 18%, transparent 82%, var(--color-accent-hot-haze));
+}
+
+.card-poster-wrapper {
+  border-color: var(--color-accent-radiance);
+  box-shadow: 0 0 12px var(--color-accent-aura), 0 0 32px var(--color-accent-hot-haze), inset 0 0 18px var(--color-accent-hot-haze);
+}
+
+.movie-card:nth-child(2n) .card-poster-wrapper {
+  box-shadow: 0 0 15px var(--color-accent-hot), 0 0 42px var(--color-accent-hot-haze);
+}
+
+.movie-card:hover .card-poster-wrapper {
+  border-color: var(--color-accent-hot);
+  box-shadow: 0 0 0 2px var(--color-accent-hot-haze), 0 0 22px var(--color-accent-hot), 0 0 64px var(--color-accent-hot-haze);
+}
+
+.card-play-icon {
+  background: var(--color-accent-hot);
+  box-shadow: 0 0 0 4px var(--color-accent-hot-haze), var(--shadow-hot);
+}
+
+.card-badge-rating {
+  border-color: var(--color-accent-hot);
+  box-shadow: 0 0 12px var(--color-accent-hot), 0 0 30px var(--color-accent-hot-haze);
+}
+
+.details-hero {
+  box-shadow: inset 0 -56px 80px var(--color-canvas), inset 0 0 90px var(--color-accent-hot-haze);
+}
+
+.details-poster,
+.trailer-frame {
+  border-color: var(--color-accent-hot);
+  box-shadow: 0 0 18px var(--color-accent-hot), 0 0 66px var(--color-accent-hot-haze), var(--shadow-tight);
+}
+
+.search-input-field {
+  border-color: var(--color-accent-hot);
+  box-shadow: 0 0 12px var(--color-accent-hot), 0 0 48px var(--color-accent-hot-haze), var(--shadow-tight);
+}
+
+@keyframes rosePulse {
+  0%, 100% { box-shadow: 0 0 18px var(--color-accent-hot), 0 0 56px var(--color-accent-hot-haze); }
+  50% { box-shadow: 0 0 26px var(--color-accent-hot), 0 0 82px var(--color-accent-hot-haze); }
+}
+
+.hero-couple-tag,
+.btn-primary {
+  animation: rosePulse 3.2s var(--ease-in-out) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-couple-tag,
+  .btn-primary {
+    animation: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-backdrop-overlay {
+    background:
+      linear-gradient(0deg, var(--color-canvas) 0%, transparent 60%),
+      radial-gradient(circle at 72% 58%, var(--color-accent-hot-wash) 0%, transparent 43%);
+  }
+
+  .movie-row-grid {
+    background: linear-gradient(90deg, var(--color-accent-hot-haze), transparent 14%, transparent 86%, var(--color-accent-hot-haze));
   }
 }
 
