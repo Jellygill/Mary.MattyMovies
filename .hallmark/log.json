@@ -1,0 +1,10 @@
+[
+  {
+    "date": "2026-09-04",
+    "scope": "app",
+    "macrostructure": "Marquee Hero / Split Studio / Workbench",
+    "theme": "custom rose-cinema",
+    "enrichment": "existing My Melody hero asset",
+    "brief": "Redesign Mary.MattyMovies while preserving content, routes, and removed-feature boundaries."
+  }
+]
