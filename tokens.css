@@ -23,6 +23,8 @@
   --color-accent-hot: oklch(76% 0.25 351);
   --color-accent-hot-wash: oklch(76% 0.25 351 / 0.68);
   --color-accent-hot-haze: oklch(76% 0.25 351 / 0.38);
+  --color-glass-surface: oklch(17% 0.032 348 / 0.76);
+  --color-sheen: oklch(100% 0 0 / 0.18);
   --shadow-rose: 0 0 28px var(--color-accent-radiance);
   --shadow-rose-wide: 0 0 60px var(--color-accent-aura);
   --shadow-hot: 0 0 18px var(--color-accent-hot), 0 0 56px var(--color-accent-hot-haze);
@@ -60,6 +62,8 @@
   --dur-short: 160ms;
   --dur-medium: 280ms;
   --dur-long: 480ms;
+  --dur-enter: 700ms;
+  --dur-ambient: 18s;
   --shadow-tight: 0 12px 30px oklch(5% 0.01 348 / 0.34);
 
   --bg-primary: var(--color-canvas);

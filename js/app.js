@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await initRows(provider);
   renderContinueWatching(storage);
   renderWatchlist(storage);
+  initCinematicMotion();
 
   // Carousel Buttons Listener
   setupCarouselControls('trendingPrev', 'trendingNext', 'trendingGrid');
@@ -38,6 +39,53 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderContinueWatching(storage);
   });
 });
+
+function initCinematicMotion() {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hero = document.getElementById('heroBanner');
+
+  requestAnimationFrame(() => document.body.classList.add('cinema-ready'));
+
+  if (!reduceMotion && hero) {
+    let scheduled = false;
+    window.addEventListener('scroll', () => {
+      if (scheduled) return;
+      scheduled = true;
+      requestAnimationFrame(() => {
+        hero.style.setProperty('--hero-scroll', `${Math.min(window.scrollY * 0.04, 24)}px`);
+        scheduled = false;
+      });
+    }, { passive: true });
+  }
+
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.16 });
+
+    document.querySelectorAll('.category-section').forEach((section) => {
+      section.classList.add('cinema-reveal');
+      observer.observe(section);
+    });
+  }
+
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest?.('a[href]');
+    if (!link || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+    const destination = new URL(link.href, window.location.href);
+    if (destination.origin !== window.location.origin || !/(movie|watch)\.html$/.test(destination.pathname)) return;
+
+    event.preventDefault();
+    document.body.classList.add('cinema-leaving');
+    window.setTimeout(() => { window.location.href = destination.href; }, reduceMotion ? 0 : 220);
+  });
+}
 
 /**
  * Initialize Hero Banner

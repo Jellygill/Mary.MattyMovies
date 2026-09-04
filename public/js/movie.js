@@ -12,6 +12,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const movieId = urlParams.get('id') || 'tears-of-steel';
   const mediaType = urlParams.get('type') || null;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  requestAnimationFrame(() => document.body.classList.add('cinema-ready'));
+
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest?.('a[href]');
+    if (!link || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+    const destination = new URL(link.href, window.location.href);
+    if (destination.origin !== window.location.origin || !/watch\.html$/.test(destination.pathname)) return;
+
+    event.preventDefault();
+    document.body.classList.add('cinema-leaving');
+    window.setTimeout(() => { window.location.href = destination.href; }, reduceMotion ? 0 : 220);
+  });
 
   try {
     const movie = await provider.getById(movieId, mediaType);
