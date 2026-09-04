@@ -269,6 +269,7 @@ img {
 .hero-content {
   position: relative;
   z-index: 2;
+  width: min(100%, 680px);
   max-width: 680px;
 }
 
@@ -415,7 +416,7 @@ img {
 
 /* --- Section Container & Rows --- */
 .main-container {
-  padding: 20px 4% 80px 4%;
+  padding: 40px 4% 80px 4%;
   display: flex;
   flex-direction: column;
   gap: 52px;
@@ -1153,267 +1154,76 @@ img {
   }
 }
 
-/* --- My Melody Interactive Floating Companion Widget --- */
-.melody-companion-widget {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  z-index: 1800;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.melody-companion-btn {
-  width: 68px;
-  height: 68px;
-  border-radius: 50%;
-  background: var(--bg-card);
-  border: 2px solid var(--accent-pink);
-  box-shadow: 0 8px 30px rgba(255, 105, 180, 0.5), 0 0 15px rgba(255, 182, 217, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  position: relative;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
-  animation: cuteBounce 3.5s ease-in-out infinite;
-}
-
-.melody-companion-btn:hover {
-  transform: scale(1.15) rotate(6deg);
-  box-shadow: 0 12px 35px rgba(255, 105, 180, 0.7), 0 0 25px rgba(255, 105, 180, 0.8);
-}
-
-.melody-companion-avatar {
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.melody-companion-badge {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  background: var(--accent-gradient);
-  color: #fff;
-  font-size: 0.65rem;
-  font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 10px;
-  border: 1px solid #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-}
-
-/* Companion Popup Card */
-.melody-companion-card {
-  position: absolute;
-  bottom: 80px;
-  right: 0;
-  width: 320px;
-  background: rgba(30, 12, 23, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--accent-pink);
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 105, 180, 0.3);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(15px) scale(0.95);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.melody-companion-card.open {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0) scale(1);
-}
-
-.melody-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(255, 182, 217, 0.2);
-  padding-bottom: 8px;
-}
-
-.melody-card-title {
-  font-family: var(--font-family-heading);
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.melody-card-close {
-  color: var(--text-muted);
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-
-.melody-card-close:hover {
-  color: var(--accent-pink);
-}
-
-.melody-card-body {
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: var(--text-secondary);
-}
-
-.melody-card-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-/* --- Date Night Random Movie Spinner --- */
-.date-night-spinner-card {
-  width: 100%;
-  background: linear-gradient(135deg, rgba(47, 18, 36, 0.85) 0%, rgba(26, 9, 20, 0.9) 100%);
-  border: 1px solid var(--accent-pink);
-  border-radius: var(--radius-lg);
-  padding: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255, 105, 180, 0.15);
-  position: relative;
-  overflow: hidden;
-}
-
-.date-night-spinner-card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255, 105, 180, 0.1) 0%, transparent 60%);
-  pointer-events: none;
-}
-
-.spinner-content-left {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-width: 540px;
-  position: relative;
-  z-index: 2;
-}
-
-.spinner-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 105, 180, 0.2);
-  color: var(--accent-soft-pink);
-  border: 1px solid rgba(255, 105, 180, 0.4);
-  padding: 4px 12px;
-  border-radius: var(--radius-full);
-  font-size: 0.8rem;
-  font-weight: 700;
-  width: fit-content;
-}
-
-.spinner-title {
-  font-family: var(--font-family-heading);
-  font-size: 1.8rem;
-  font-weight: 800;
-  color: #ffffff;
-}
-
-.spinner-subtitle {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-.spinner-artwork-right {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: relative;
-  z-index: 2;
-}
-
-.melody-spinner-img {
-  width: 140px;
-  height: auto;
-  filter: drop-shadow(0 8px 20px rgba(255, 105, 180, 0.4));
-  animation: cuteBounce 4s ease-in-out infinite;
-}
-
-/* Spinner Modal */
-.spinner-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 2100;
-  background: rgba(14, 6, 10, 0.92);
-  backdrop-filter: blur(20px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.spinner-modal-backdrop.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.spinner-modal-card {
-  width: 100%;
-  max-width: 480px;
-  background: var(--bg-card);
-  border: 2px solid var(--accent-pink);
-  border-radius: var(--radius-lg);
-  padding: 32px;
-  text-align: center;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.9), 0 0 35px rgba(255, 105, 180, 0.4);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
-.spinner-wheel-wrapper {
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  border: 4px dashed var(--accent-pink);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  background: rgba(255, 105, 180, 0.08);
-}
-
-.spinner-wheel-wrapper.spinning {
-  animation: spinWheel 1.2s cubic-bezier(0.15, 0.85, 0.35, 1.2) infinite;
-}
-
-@keyframes spinWheel {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(1440deg); }
-}
-
-@keyframes cuteBounce {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+@media (max-width: 480px) {
+  .site-header {
+    gap: 12px;
+  }
+  .nav-brand {
+    min-width: 0;
+    gap: 10px;
+    font-size: 1.25rem;
+  }
+  .brand-icon-img {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 auto;
+  }
+  .brand-title {
+    min-width: 0;
+    white-space: nowrap;
+  }
+  .nav-subtitle-tag {
+    display: none;
+  }
+  .nav-actions {
+    flex: 0 0 auto;
+  }
+  .search-trigger-btn {
+    width: 44px;
+    height: 44px;
+    justify-content: center;
+    padding: 0;
+  }
+  .search-trigger-btn span {
+    display: none;
+  }
+  .hero-banner {
+    min-height: 610px;
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+  .hero-content {
+    width: 100%;
+    max-width: 100%;
+  }
+  .hero-meta {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    row-gap: 10px;
+  }
+  .hero-genres {
+    flex-wrap: wrap;
+  }
+  .hero-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 44px;
+    gap: 12px;
+    width: 100%;
+  }
+  .hero-actions .btn {
+    padding-right: 16px;
+    padding-left: 16px;
+    white-space: nowrap;
+  }
+  #heroWatchBtn {
+    grid-column: 1 / -1;
+  }
+  #heroInfoBtn {
+    grid-column: 1;
+  }
+  #heroWatchlistBtn {
+    grid-column: 2;
+  }
 }
 
 /* Toast Notifications */

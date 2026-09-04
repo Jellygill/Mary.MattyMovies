@@ -1,8 +1,7 @@
 /**
  * app.js - Home Page Controller
  * Handles hero banner initialization, movie row rendering,
- * watchlist sync, continue watching progress, date night movie spinner,
- * and My Melody floating companion widget.
+ * watchlist sync, continue watching progress, and movie row rendering.
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -28,10 +27,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Carousel Buttons Listener
   setupCarouselControls('trendingPrev', 'trendingNext', 'trendingGrid');
   setupCarouselControls('popularPrev', 'popularNext', 'popularGrid');
-
-  // Interactive Features
-  initDateNightSpinner(provider);
-  initMelodyCompanion(provider);
 
   // Watchlist & Progress Updates Listeners
   window.addEventListener('cinestream:watchlist-updated', (e) => {
@@ -239,119 +234,6 @@ function setupCarouselControls(prevBtnId, nextBtnId, containerId) {
   next.onclick = () => {
     container.scrollBy({ left: 460, behavior: 'smooth' });
   };
-}
-
-/**
- * Date Night Random Movie Spinner Logic
- */
-function initDateNightSpinner(provider) {
-  const openBtn = document.getElementById('openSpinnerBtn');
-  const closeBtn = document.getElementById('closeSpinnerBtn');
-  const spinAgainBtn = document.getElementById('spinAgainBtn');
-  const modal = document.getElementById('spinnerModal');
-  const wheel = document.getElementById('spinnerWheel');
-  const resultTitle = document.getElementById('spinnerResultTitle');
-  const resultSub = document.getElementById('spinnerResultSub');
-  const watchBtn = document.getElementById('watchSpinResultBtn');
-
-  if (!openBtn || !modal) return;
-
-  const openModalAndSpin = async () => {
-    modal.classList.add('open');
-    await runSpinnerAnimation(provider);
-  };
-
-  openBtn.onclick = openModalAndSpin;
-  spinAgainBtn.onclick = () => runSpinnerAnimation(provider);
-  closeBtn.onclick = () => modal.classList.remove('open');
-
-  modal.onclick = (e) => {
-    if (e.target === modal) modal.classList.remove('open');
-  };
-}
-
-async function runSpinnerAnimation(provider) {
-  const wheel = document.getElementById('spinnerWheel');
-  const resultTitle = document.getElementById('spinnerResultTitle');
-  const resultSub = document.getElementById('spinnerResultSub');
-  const watchBtn = document.getElementById('watchSpinResultBtn');
-
-  if (!wheel || !resultTitle) return;
-
-  // Reset state
-  wheel.classList.add('spinning');
-  resultTitle.textContent = 'My Melody is picking a movie... 🎀';
-  resultSub.textContent = 'Randomizing Mary & Matty\'s date night choice!';
-  if (watchBtn) watchBtn.style.display = 'none';
-
-  try {
-    const trending = await provider.getTrending();
-    const popular = await provider.getPopular();
-    const pool = [...trending, ...popular];
-
-    setTimeout(() => {
-      wheel.classList.remove('spinning');
-      if (pool.length > 0) {
-        const picked = pool[Math.floor(Math.random() * pool.length)];
-        resultTitle.innerHTML = `<i class="fa-solid fa-heart" style="color: var(--accent-pink);"></i> ${picked.title}`;
-        resultSub.textContent = `${picked.year} • Rating ${picked.rating} • Perfect choice for tonight!`;
-        if (watchBtn) {
-          watchBtn.href = `./watch.html?id=${encodeURIComponent(picked.id)}`;
-          watchBtn.style.display = 'inline-flex';
-        }
-      } else {
-        resultTitle.textContent = 'Tears of Steel';
-        resultSub.textContent = 'Our featured classic!';
-      }
-    }, 1200);
-  } catch (e) {
-    wheel.classList.remove('spinning');
-    resultTitle.textContent = 'Ready for Date Night!';
-    resultSub.textContent = 'Click below to watch our premiere movie.';
-  }
-}
-
-/**
- * Interactive My Melody Floating Companion Widget
- */
-function initMelodyCompanion(provider) {
-  const btn = document.getElementById('melodyBtn');
-  const card = document.getElementById('melodyCard');
-  const closeBtn = document.getElementById('closeMelodyCard');
-  const body = document.getElementById('melodyCardBody');
-  const spinAction = document.getElementById('melodySpinActionBtn');
-
-  if (!btn || !card) return;
-
-  const melodyQuotes = [
-    `"Ready for movie night, Mary & Matty? Don't forget to grab the popcorn and cozy up together! 🎀🍿"`,
-    `"My Melody says: Every date night with you two is full of love and magic! 💕"`,
-    `"Can't decide what to watch? Use the Date Night Spinner for a surprise movie! 🎲"`,
-    `"Remember to add your favorite movies to Our Watchlist so we never run out of date night ideas! 💖"`
-  ];
-
-  let currentQuoteIdx = 0;
-
-  btn.onclick = () => {
-    currentQuoteIdx = (currentQuoteIdx + 1) % melodyQuotes.length;
-    if (body) body.textContent = melodyQuotes[currentQuoteIdx];
-    card.classList.toggle('open');
-  };
-
-  if (closeBtn) {
-    closeBtn.onclick = (e) => {
-      e.stopPropagation();
-      card.classList.remove('open');
-    };
-  }
-
-  if (spinAction) {
-    spinAction.onclick = () => {
-      card.classList.remove('open');
-      const openSpinner = document.getElementById('openSpinnerBtn');
-      if (openSpinner) openSpinner.click();
-    };
-  }
 }
 
 /**

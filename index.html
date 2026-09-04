@@ -27,7 +27,7 @@
     </ul>
 
     <div class="nav-actions">
-      <button class="search-trigger-btn" id="openSearchBtn">
+      <button class="search-trigger-btn" id="openSearchBtn" aria-label="Search movies">
         <i class="fa-solid fa-magnifying-glass"></i>
         <span>Search movies...</span>
       </button>
@@ -75,21 +75,6 @@
 
   <!-- Main Content Container -->
   <main class="main-container">
-
-    <!-- Date Night Movie Spinner Section -->
-    <section class="date-night-spinner-card">
-      <div class="spinner-content-left">
-        <div class="spinner-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> Date Night Picker 🎀</div>
-        <h2 class="spinner-title">Can't decide what to watch tonight?</h2>
-        <p class="spinner-subtitle">Let My Melody randomly pick a surprise date night movie!</p>
-        <button class="btn btn-primary" id="openSpinnerBtn" style="margin-top: 8px; width: fit-content;">
-          <i class="fa-solid fa-dice"></i> Spin for Date Night Movie!
-        </button>
-      </div>
-      <div class="spinner-artwork-right">
-        <img src="./assets/images/my melody gif2.gif" alt="My Melody Date Night Popcorn" class="melody-spinner-img">
-      </div>
-    </section>
 
     <!-- Continue Watching Section (Hidden if empty) -->
     <section class="category-section" id="continue-watching-section" style="display: none;">
@@ -173,50 +158,6 @@
       <button class="search-close-btn" id="closeSearchBtn"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="search-results-wrapper" id="searchResultsContainer"></div>
-  </div>
-
-  <!-- Interactive My Melody Floating Companion Widget -->
-  <div class="melody-companion-widget" id="melodyWidget">
-    <div class="melody-companion-card" id="melodyCard">
-      <div class="melody-card-header">
-        <div class="melody-card-title"><i class="fa-solid fa-heart heart-pulse"></i> My Melody's Love Note 🎀</div>
-        <i class="fa-solid fa-xmark melody-card-close" id="closeMelodyCard"></i>
-      </div>
-      <div class="melody-card-body" id="melodyCardBody">
-        "Get ready for Movie Night hon! mwhehehhe"
-      </div>
-      <div class="melody-card-actions">
-        <button class="btn btn-secondary" style="font-size: 0.8rem; padding: 6px 12px; width: 100%;" id="melodySpinActionBtn">
-          <i class="fa-solid fa-dice"></i> Pick a Surprise Movie!
-        </button>
-      </div>
-    </div>
-    <button class="melody-companion-btn" id="melodyBtn" title="My Melody Date Night Companion 🎀">
-      <img src="./assets/images/my melody gif3.gif" alt="My Melody Avatar" class="melody-companion-avatar">
-      <span class="melody-companion-badge">💕</span>
-    </button>
-  </div>
-
-  <!-- Date Night Spinner Modal Backdrop -->
-  <div class="spinner-modal-backdrop" id="spinnerModal">
-    <div class="spinner-modal-card">
-      <div class="spinner-badge"><i class="fa-solid fa-heart heart-pulse"></i> Our date night picker! </div>
-      
-      <div class="spinner-wheel-wrapper" id="spinnerWheel">
-        <img src="./assets/images/my melody gif4.gif" alt="My Melody Spinner" style="width: 80px; height: auto;">
-      </div>
-
-      <div id="spinnerResultBox" style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
-        <h3 style="font-size: 1.3rem; font-weight: 700; color: #fff;" id="spinnerResultTitle">Spinning the Date Night Wheel...</h3>
-        <p style="color: var(--text-muted); font-size: 0.9rem;" id="spinnerResultSub">My Melody is picking the best movie for tonight!</p>
-      </div>
-
-      <div style="display: flex; gap: 12px; margin-top: 10px;">
-        <button class="btn btn-secondary" id="closeSpinnerBtn">Close</button>
-        <button class="btn btn-primary" id="spinAgainBtn"><i class="fa-solid fa-rotate"></i> Spin Again</button>
-        <a href="#" class="btn btn-primary" id="watchSpinResultBtn" style="display: none;"><i class="fa-solid fa-play"></i> Watch Movie</a>
-      </div>
-    </div>
   </div>
 
   <!-- Couple Toast Container -->
