@@ -98,11 +98,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!watchData) return;
 
     if (streamUrl) {
-      watchData.playback = {
-        type: 'direct',
-        url: streamUrl,
-        subtitles: subUrl ? [{ label: 'English', srclang: 'en', src: subUrl, default: true }] : []
-      };
+      const isDirectFile = /\.(m3u8|mp4|webm|ogg)($|\?)/i.test(streamUrl);
+      if (isDirectFile) {
+        watchData.playback = {
+          type: 'direct',
+          url: streamUrl,
+          subtitles: subUrl ? [{ label: 'English', srclang: 'en', src: subUrl, default: true }] : []
+        };
+      } else {
+        watchData.playback = {
+          type: 'embed',
+          url: streamUrl,
+          customEmbed: true
+        };
+      }
     }
 
     document.getElementById('playerTitle').textContent = `${watchData.title} (${watchData.year})`;
@@ -111,17 +120,22 @@ document.addEventListener('DOMContentLoaded', async () => {
       iframe.style.display = 'block';
       video.style.display = 'none';
       controls.style.display = 'none';
-      servers = window.CineStream.VideoClientProvider.EMBED_SERVERS;
-      serverIndex = Math.min(serverIndex, Math.max(0, servers.length - 1));
-      serversButton.hidden = servers.length === 0;
-      renderServers();
-      if (watchData.mediaType === 'tv') {
-        seasonData = await provider.getTvSeasonEpisodes(movieId, season);
-        if (!seasonData.episodes.some((item) => item.number === episode)) episode = seasonData.episodes[0]?.number || 1;
-        episodesButton.hidden = false;
-        renderEpisodes();
+      if (watchData.playback.customEmbed) {
+        iframe.src = watchData.playback.url;
+        serversButton.hidden = true;
+      } else {
+        servers = window.CineStream.VideoClientProvider.EMBED_SERVERS;
+        serverIndex = Math.min(serverIndex, Math.max(0, servers.length - 1));
+        serversButton.hidden = servers.length === 0;
+        renderServers();
+        if (watchData.mediaType === 'tv') {
+          seasonData = await provider.getTvSeasonEpisodes(movieId, season);
+          if (!seasonData.episodes.some((item) => item.number === episode)) episode = seasonData.episodes[0]?.number || 1;
+          episodesButton.hidden = false;
+          renderEpisodes();
+        }
+        updateEmbed();
       }
-      updateEmbed();
     } else {
       video.style.display = 'block';
       controls.style.display = 'flex';
