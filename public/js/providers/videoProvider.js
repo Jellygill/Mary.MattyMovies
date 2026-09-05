@@ -36,7 +36,7 @@ window.CineStream = window.CineStream || {};
     }
   };
 
-  // 100% Tested Working Stream Servers across TV Shows (True Beauty) and Movies
+  // Verified servers with subtitle + multi-audio support (tested Sept 2026)
   const EMBED_SERVERS = [
     {
       id: 'videasy',
@@ -45,28 +45,22 @@ window.CineStream = window.CineStream || {};
       getTvUrl: (id, s = 1, e = 1) => `https://player.videasy.net/tv/${id}/${s}/${e}`
     },
     {
-      id: 'vidsrcme',
-      name: 'Server 2 (VidSrc.me)',
-      getMovieUrl: (id, imdb) => imdb ? `https://vidsrc.me/embed/movie?imdb=${imdb}` : `https://vidsrc.me/embed/movie?tmdb=${id}`,
-      getTvUrl: (id, s = 1, e = 1, imdb) => imdb ? `https://vidsrc.me/embed/tv?imdb=${imdb}&season=${s}&episode=${e}` : `https://vidsrc.me/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
+      id: 'vidsrcpm',
+      name: 'Server 2 (VidSrc — Subs + Multi-Audio)',
+      getMovieUrl: (id) => `https://vidsrc.pm/embed/movie?tmdb=${id}`,
+      getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.pm/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
     },
     {
-      id: 'twoembed',
-      name: 'Server 3 (2Embed)',
-      getMovieUrl: (id) => `https://www.2embed.cc/embed/${id}`,
-      getTvUrl: (id, s = 1, e = 1) => `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`
+      id: 'multiembed',
+      name: 'Server 3 (MultiEmbed — Subs + Multi-Audio)',
+      getMovieUrl: (id) => `https://multiembed.mov/?video_id=${id}&tmdb=1`,
+      getTvUrl: (id, s = 1, e = 1) => `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`
     },
     {
-      id: 'smashystream',
-      name: 'Server 4 (SmashyStream)',
-      getMovieUrl: (id) => `https://embed.smashystream.com/playere.php?tmdb=${id}`,
-      getTvUrl: (id, s = 1, e = 1) => `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`
-    },
-    {
-      id: 'nontongo',
-      name: 'Server 5 (NontonGo)',
-      getMovieUrl: (id) => `https://www.nontongo.win/embed/movie/${id}`,
-      getTvUrl: (id, s = 1, e = 1) => `https://www.nontongo.win/embed/tv/${id}/${s}/${e}`
+      id: 'vidlink',
+      name: 'Server 4 (VidLink — Subs + Multi-Audio)',
+      getMovieUrl: (id) => `https://vidlink.pro/movie/${id}`,
+      getTvUrl: (id, s = 1, e = 1) => `https://vidlink.pro/tv/${id}/${s}/${e}`
     }
   ];
 
