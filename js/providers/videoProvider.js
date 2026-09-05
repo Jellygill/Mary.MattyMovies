@@ -45,10 +45,10 @@ window.CineStream = window.CineStream || {};
       getTvUrl: (id, s = 1, e = 1) => `https://player.videasy.net/tv/${id}/${s}/${e}`
     },
     {
-      id: 'vidsrcpm',
-      name: 'Server 2 (VidSrc.pm — Subs + Multi-Audio)',
-      getMovieUrl: (id) => `https://vidsrc.pm/embed/movie?tmdb=${id}`,
-      getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.pm/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
+      id: 'vidcore',
+      name: 'Server 2 (VidCore — HLS + Multi-Track / ArtPlayer)',
+      getMovieUrl: (id) => `https://vidcore.org/embed/movie/${id}`,
+      getTvUrl: (id, s = 1, e = 1) => `https://vidcore.org/embed/tv/${id}/${s}/${e}`
     },
     {
       id: 'multiembed',
@@ -58,15 +58,15 @@ window.CineStream = window.CineStream || {};
     },
     {
       id: 'vidlink',
-      name: 'Server 4 (VidLink — Subs + Multi-Audio)',
+      name: 'Server 4 (VidLink — Fast CDN + Subtitles)',
       getMovieUrl: (id) => `https://vidlink.pro/movie/${id}`,
       getTvUrl: (id, s = 1, e = 1) => `https://vidlink.pro/tv/${id}/${s}/${e}`
     },
     {
-      id: 'vidsrcrip',
-      name: 'Server 5 (VidSrc.rip — Fast CDN Mirror)',
-      getMovieUrl: (id) => `https://vidsrc.rip/embed/movie/${id}`,
-      getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.rip/embed/tv/${id}/${s}/${e}`
+      id: 'vidsrcpm',
+      name: 'Server 5 (VidSrc.pm — Multi-Audio Options)',
+      getMovieUrl: (id) => `https://vidsrc.pm/embed/movie?tmdb=${id}`,
+      getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.pm/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
     }
   ];
 
