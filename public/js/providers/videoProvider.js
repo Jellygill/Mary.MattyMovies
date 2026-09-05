@@ -36,23 +36,23 @@ window.CineStream = window.CineStream || {};
     }
   };
 
-  // Curated Asian Drama direct stream mappings (KissCloud / MyAsianTV CDN)
+  // Curated Asian Drama direct stream mappings (K-VID / VidBasic / EmbedLoad)
   const ASIAN_DRAMA_SOURCES = {
     // Resident Playbook (TMDB 235355)
     '235355': {
       1: {
-        1: 'https://kisscloud.online/video/52947e0ade57a09e4a1386d08f17b656',
-        2: 'https://kisscloud.online/video/69d658d0b2859e32cd4dc3b970c8496c',
-        3: 'https://kisscloud.online/video/e9fd7c2c6623306db59b6aef5c0d5cac',
-        4: 'https://kisscloud.online/video/71a58e8cb75904f24cde464161c3e766',
-        5: 'https://kisscloud.online/video/36ac8e558ac7690b6f44e2cb5ef93322',
-        6: 'https://kisscloud.online/video/92bbd31f8e0e43a7da8a6295b251725f',
-        7: 'https://kisscloud.online/video/70c445ee64b1ed0583367a12a79a9ef2',
-        8: 'https://kisscloud.online/video/9407c826d8e3c07ad37cb2d13d1cb641',
-        9: 'https://kisscloud.online/video/2b64c2f19d868305aa8bbc2d72902cc5',
-        10: 'https://kisscloud.online/video/f6b5f8c32c65fee991049a55dc97d1ce',
-        11: 'https://kisscloud.online/video/831b1ac54cc8db480e3babac5fa2256b',
-        12: 'https://kisscloud.online/video/14e422f05b68cc0139988e128ee880df'
+        1: 'https://embedload.cfd/watch?v=7204',
+        2: 'https://embedload.cfd/watch?v=7301',
+        3: 'https://vidbasic.top/embed/al2dnud4bdr',
+        4: 'https://vidbasic.top/embed/e31qnswkazl',
+        5: 'https://vidbasic.top/embed/m1av4ijem4q',
+        6: 'https://vidbasic.top/embed/n6v9aunkg64',
+        7: 'https://vidbasic.top/embed/n6v9aunkq3j',
+        8: 'https://vidbasic.top/embed/34kwvhg19ln',
+        9: 'https://vidbasic.top/embed/1bmd4sd1gvp',
+        10: 'https://vidbasic.top/embed/1bmd4sd1grp',
+        11: 'https://vidbasic.top/embed/wnljqswkmv3',
+        12: 'https://vidbasic.top/embed/gqpjnfakjrw'
       }
     }
   };
@@ -90,8 +90,8 @@ window.CineStream = window.CineStream || {};
       getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.pm/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
     },
     {
-      id: 'kisscloud',
-      name: 'Server 6 (KissCloud — Asian Drama Original Audio)',
+      id: 'kvid',
+      name: 'Server 6 (K-VID — Asian Drama Original Audio)',
       getMovieUrl: (id) => `https://player.videasy.net/movie/${id}`,
       getTvUrl: (id, s = 1, e = 1) => {
         const drama = ASIAN_DRAMA_SOURCES[String(id)];
