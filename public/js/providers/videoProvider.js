@@ -60,16 +60,10 @@ window.CineStream = window.CineStream || {};
   // Verified servers with subtitle + multi-audio support (tested Sept 2026)
   const EMBED_SERVERS = [
     {
-      id: 'kisscloud',
-      name: 'Server 1 (KissCloud — Asian Drama Original Audio)',
+      id: 'videasy',
+      name: 'Server 1 (Videasy — Clean + Subtitles)',
       getMovieUrl: (id) => `https://player.videasy.net/movie/${id}`,
-      getTvUrl: (id, s = 1, e = 1) => {
-        const drama = ASIAN_DRAMA_SOURCES[String(id)];
-        if (drama && drama[s] && drama[s][e]) {
-          return drama[s][e];
-        }
-        return `https://player.videasy.net/tv/${id}/${s}/${e}`;
-      }
+      getTvUrl: (id, s = 1, e = 1) => `https://player.videasy.net/tv/${id}/${s}/${e}`
     },
     {
       id: 'vidcore',
@@ -94,6 +88,18 @@ window.CineStream = window.CineStream || {};
       name: 'Server 5 (VidSrc.pm — Multi-Audio Options)',
       getMovieUrl: (id) => `https://vidsrc.pm/embed/movie?tmdb=${id}`,
       getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.pm/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
+    },
+    {
+      id: 'kisscloud',
+      name: 'Server 6 (KissCloud — Asian Drama Original Audio)',
+      getMovieUrl: (id) => `https://player.videasy.net/movie/${id}`,
+      getTvUrl: (id, s = 1, e = 1) => {
+        const drama = ASIAN_DRAMA_SOURCES[String(id)];
+        if (drama && drama[s] && drama[s][e]) {
+          return drama[s][e];
+        }
+        return `https://player.videasy.net/tv/${id}/${s}/${e}`;
+      }
     }
   ];
 
