@@ -40,19 +40,19 @@ window.CineStream = window.CineStream || {};
   const EMBED_SERVERS = [
     {
       id: 'videasy',
-      name: 'Server 1 (Videasy)',
+      name: 'Server 1 (Videasy — Clean + Subtitles)',
       getMovieUrl: (id) => `https://player.videasy.net/movie/${id}`,
       getTvUrl: (id, s = 1, e = 1) => `https://player.videasy.net/tv/${id}/${s}/${e}`
     },
     {
       id: 'vidsrcpm',
-      name: 'Server 2 (VidSrc — Subs + Multi-Audio)',
+      name: 'Server 2 (VidSrc.pm — Subs + Multi-Audio)',
       getMovieUrl: (id) => `https://vidsrc.pm/embed/movie?tmdb=${id}`,
       getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.pm/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
     },
     {
       id: 'multiembed',
-      name: 'Server 3 (MultiEmbed — Subs + Multi-Audio)',
+      name: 'Server 3 (MultiEmbed — Multi-Host / Original Audio)',
       getMovieUrl: (id) => `https://multiembed.mov/?video_id=${id}&tmdb=1`,
       getTvUrl: (id, s = 1, e = 1) => `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`
     },
@@ -61,6 +61,12 @@ window.CineStream = window.CineStream || {};
       name: 'Server 4 (VidLink — Subs + Multi-Audio)',
       getMovieUrl: (id) => `https://vidlink.pro/movie/${id}`,
       getTvUrl: (id, s = 1, e = 1) => `https://vidlink.pro/tv/${id}/${s}/${e}`
+    },
+    {
+      id: 'vidsrcrip',
+      name: 'Server 5 (VidSrc.rip — Fast CDN Mirror)',
+      getMovieUrl: (id) => `https://vidsrc.rip/embed/movie/${id}`,
+      getTvUrl: (id, s = 1, e = 1) => `https://vidsrc.rip/embed/tv/${id}/${s}/${e}`
     }
   ];
 

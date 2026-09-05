@@ -93,6 +93,14 @@
         </div>
 
         <div class="controls-group-right">
+          <!-- Audio Tracks Dropdown -->
+          <div id="audioGroup" style="display: none; align-items: center; gap: 6px; color: #aaa; font-size: 0.85rem;">
+            <i class="fa-solid fa-language"></i>
+            <select class="player-select" id="audioSelect">
+              <option value="0">Default Audio</option>
+            </select>
+          </div>
+
           <!-- Subtitle Tracks Dropdown -->
           <div style="display: flex; align-items: center; gap: 6px; color: #aaa; font-size: 0.85rem;">
             <i class="fa-solid fa-closed-captioning"></i>
@@ -129,6 +137,8 @@
 
   </div>
 
+  <!-- HLS Stream Player Support -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <!-- Scripts -->
   <script src="./js/providers/tmdbProvider.js"></script>
   <script src="./js/providers/videoProvider.js"></script>

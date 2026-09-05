@@ -91,8 +91,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   try {
+    const streamUrl = params.get('streamUrl');
+    const subUrl = params.get('subUrl');
+
     watchData = await provider.getWatchDetails(movieId, mediaType);
     if (!watchData) return;
+
+    if (streamUrl) {
+      watchData.playback = {
+        type: 'direct',
+        url: streamUrl,
+        subtitles: subUrl ? [{ label: 'English', srclang: 'en', src: subUrl, default: true }] : []
+      };
+    }
+
     document.getElementById('playerTitle').textContent = `${watchData.title} (${watchData.year})`;
     document.title = `Watching ${watchData.title} - Mary.MattyMovies`;
     if (watchData.playback?.type === 'embed') {
@@ -139,15 +151,66 @@ function setupDirectVideoPlayer(video, playback, watchData, storage, player) {
   const time = $('timeDisplay');
   const speed = $('speedSelect');
   const subtitles = $('subtitleSelect');
+  const audioGroup = $('audioGroup');
+  const audioSelect = $('audioSelect');
   const pip = $('pipBtn');
   const fullscreen = $('fullscreenBtn');
-  video.src = playback.url;
+  let hlsInstance = null;
+
+  const isHls = playback.url && playback.url.includes('.m3u8');
+
+  if (isHls && window.Hls && window.Hls.isSupported()) {
+    hlsInstance = new window.Hls();
+    hlsInstance.loadSource(playback.url);
+    hlsInstance.attachMedia(video);
+
+    // Audio tracks management
+    hlsInstance.on(window.Hls.Events.AUDIO_TRACKS_UPDATED, (event, data) => {
+      if (data.audioTracks && data.audioTracks.length > 1) {
+        audioGroup.style.display = 'flex';
+        audioSelect.innerHTML = data.audioTracks.map((track, i) =>
+          `<option value="${i}" ${i === hlsInstance.audioTrack ? 'selected' : ''}>${track.name || track.lang || `Track ${i + 1}`}</option>`
+        ).join('');
+      }
+    });
+
+    audioSelect.onchange = (e) => {
+      if (hlsInstance) {
+        hlsInstance.audioTrack = Number(e.target.value);
+      }
+    };
+
+    // HLS subtitles management
+    hlsInstance.on(window.Hls.Events.SUBTITLE_TRACKS_UPDATED, (event, data) => {
+      if (data.subtitleTracks && data.subtitleTracks.length > 0) {
+        subtitles.innerHTML = '<option value="off">Subtitles Off</option>' +
+          data.subtitleTracks.map((track, i) => `<option value="${i}">${track.name || track.lang || `Subtitle ${i + 1}`}</option>`).join('');
+      }
+    });
+
+    subtitles.onchange = (e) => {
+      if (hlsInstance) {
+        hlsInstance.subtitleTrack = e.target.value === 'off' ? -1 : Number(e.target.value);
+      }
+    };
+  } else {
+    video.src = playback.url;
+  }
+
+  // Native HTML5 subtitle tracks
   (playback.subtitles || []).forEach((sub, index) => {
     const track = document.createElement('track');
     Object.assign(track, { kind: 'subtitles', label: sub.label, srclang: sub.srclang, src: sub.src, default: Boolean(sub.default) });
     video.appendChild(track);
     subtitles.insertAdjacentHTML('beforeend', `<option value="${index}" ${sub.default ? 'selected' : ''}>${sub.label}</option>`);
   });
+
+  if (!isHls) {
+    subtitles.onchange = (event) => [...video.textTracks].forEach((track, index) => {
+      track.mode = event.target.value !== 'off' && Number(event.target.value) === index ? 'showing' : 'hidden';
+    });
+  }
+
   const saved = storage.getProgress(watchData.id);
   if (saved?.currentTime > 5) video.currentTime = saved.currentTime;
   const togglePlay = () => video.paused ? video.play() : video.pause();
@@ -177,7 +240,6 @@ function setupDirectVideoPlayer(video, playback, watchData, storage, player) {
   volume.oninput = (event) => { video.volume = Number(event.target.value); video.muted = video.volume === 0; updateVolume(); };
   mute.onclick = () => { video.muted = !video.muted; updateVolume(); };
   speed.onchange = (event) => { video.playbackRate = Number(event.target.value); };
-  subtitles.onchange = (event) => [...video.textTracks].forEach((track, index) => { track.mode = event.target.value !== 'off' && Number(event.target.value) === index ? 'showing' : 'hidden'; });
   if (pip && document.pictureInPictureEnabled) pip.onclick = () => document.pictureInPictureElement ? document.exitPictureInPicture() : video.requestPictureInPicture();
   fullscreen.onclick = () => document.fullscreenElement ? document.exitFullscreen() : player.requestFullscreen();
   let idleTimer;
