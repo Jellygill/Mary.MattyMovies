@@ -62,8 +62,8 @@ window.CineStream = window.CineStream || {};
     {
       id: 'videasy',
       name: 'Server 1 (Videasy — Clean + Subtitles)',
-      getMovieUrl: (id) => `https://player.videasy.net/movie/${id}`,
-      getTvUrl: (id, s = 1, e = 1) => `https://player.videasy.net/tv/${id}/${s}/${e}`
+      getMovieUrl: (id, imdb) => imdb ? `https://player.videasy.net/movie/${id}?imdb=${imdb}` : `https://player.videasy.net/movie/${id}`,
+      getTvUrl: (id, s = 1, e = 1, imdb) => imdb ? `https://player.videasy.net/tv/${id}/${s}/${e}?imdb=${imdb}` : `https://player.videasy.net/tv/${id}/${s}/${e}`
     },
     {
       id: 'vidcore',
