@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="referrer" content="no-referrer">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Watching - Mary.MattyMovies Player</title>
   <meta name="description" content="Cinematic video player page on Mary.MattyMovies.">
   <meta name="theme-color" content="#000000">
@@ -53,7 +53,7 @@
     </video>
 
     <!-- Authorized Embed Iframe Player Container -->
-    <iframe class="player-iframe-element" id="mainIframePlayer" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="no-referrer" style="display: none;"></iframe>
+    <iframe class="player-iframe-element" id="mainIframePlayer" allow="autoplay; encrypted-media; picture-in-picture; fullscreen; clipboard-write; forms" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="display: none;"></iframe>
 
     <!-- Custom Control Overlay Bar for HTML5 Video -->
     <div class="player-bottom-controls" id="playerControls" style="display: none;">
